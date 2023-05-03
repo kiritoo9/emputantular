@@ -18,12 +18,8 @@ use Core\Config;
 
 class Core
 {
-	protected $app = [
-		'conn' => null,
-		'session' => null
-	];
 
-	private $DB;
+	public $DB;
 
 	protected function _loadEnv()
 	{
@@ -31,10 +27,11 @@ class Core
 		$dotenv->load(__DIR__.'/../.env');
 	}
 
-	public function init()
+	public function init(): void
 	{
 		$this->_loadEnv();
-		$this->DB = new Config();
+
+		$DB = new Config();
 
 		$DB_CONFIGS = (object)[
 			"DB_HOST" => $_ENV['DB_HOST'] ?? null,
@@ -53,11 +50,9 @@ class Core
 		) $use_database = true;
 
 		if($use_database && $DB_CONFIGS->DB_DRIVER == 'postgre') {
-			$this->app['conn'] = $this->DB->psql_connect($DB_CONFIGS);
+			$this->DB = $DB->psql_connect($DB_CONFIGS);
 		} elseif($use_database && $DB_CONFIGS->DB_DRIVER == 'mysql') {
-			$this->app['conn'] = $this->DB->psql_connect($DB_CONFIGS);
+			$this->DB = $DB->psql_connect($DB_CONFIGS);
 		}
-
-		return $this->app;
 	}
 }

@@ -15,13 +15,16 @@ use Core\Routes;
 $routes = new Routes();
 
 $routes->get('/', function() {
-    echo "hello world this is home";
+    \Core\Libs::response([
+        'appname' => $routes->ENV['APP_NAME'] ?? 'Emputantular Framework',
+        'version' => $routes->ENV['APP_VERSION'] ?? '2.0.0',
+    ]);
+});
+
+$routes->group('/main', function($routes) {
+    $routes->get('/about', function() {
+        echo "Hellow this is world";
+    });
 });
 
 $routes->run();
-
-// foreach (scandir(__DIR__) as $row => $value) {
-// 	if(false === str_contains((string)$value, '.')) {
-// 		require_once __DIR__ . "/{$value}/routes.php";
-// 	}
-// }

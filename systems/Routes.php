@@ -2,22 +2,44 @@
 
 namespace Core;
 
-class Routes
+use Core\Core;
+
+class Routes extends Core
 {
 
 	private array $routes = [];
+	private string $group = '';
 	private $notFoundHandler = null;
+	public array $ENV = [];
 
-	public function get(string $path, $callback): void
+	public function __construct()
 	{
-		$this->addCallback('GET', $path, $callback);
+		$this->ENV = $_ENV;
 	}
 
-	private function addCallback(string $method, string $path, $callback): void
+	public function group(string $path, ...$params)
 	{
-		$this->routes[$method . $path] = [
-			'path' => $path,
+		$callback = array_pop($params);
+		$this->group = $path;
+
+		if (is_callable($callback)) 
+			$callback($this);
+
+		$this->group = '';
+	}
+
+	public function get(string $path, ...$params): void
+	{
+		$this->addCallback('GET', $path, $params);
+	}
+
+	private function addCallback(string $method, string $path, $params): void
+	{
+		$callback = array_pop($params);
+		$this->routes[$method . $this->group . $path] = [
+			'path' => $this->group . $path,
 			'method' => $method,
+			'middlewares' => $params,
 			'callback' => $callback
 		];
 	}
@@ -43,5 +65,14 @@ class Routes
 		call_user_func_array($activeRoute, [
 			array_merge($_GET, $_POST)
 		]);
+	}
+
+	/**
+	 * Small function for routes
+	 * 
+	*/
+	public function response(array $callback = []): void
+	{
+
 	}
 }
