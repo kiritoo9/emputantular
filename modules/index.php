@@ -16,8 +16,8 @@ $routes = new Routes();
 
 $routes->get('/', function() {
     \Core\Libs::response([
-        'appname' => $routes->ENV['APP_NAME'] ?? 'Emputantular Framework',
-        'version' => $routes->ENV['APP_VERSION'] ?? '2.0.0',
+        'appname' => \Core\Routes::$ENV['APP_NAME'] ?? 'Emputantular Framework',
+        'version' => \Core\Routes::$ENV['APP_VERSION'] ?? '2.0.0',
     ]);
 });
 

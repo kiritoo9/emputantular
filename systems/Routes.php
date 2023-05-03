@@ -10,11 +10,11 @@ class Routes extends Core
 	private array $routes = [];
 	private string $group = '';
 	private $notFoundHandler = null;
-	public array $ENV = [];
+	public static array $ENV = [];
 
 	public function __construct()
 	{
-		$this->ENV = $_ENV;
+		self::$ENV = $_ENV;
 	}
 
 	public function group(string $path, ...$params)
@@ -67,12 +67,4 @@ class Routes extends Core
 		]);
 	}
 
-	/**
-	 * Small function for routes
-	 * 
-	*/
-	public function response(array $callback = []): void
-	{
-
-	}
 }
