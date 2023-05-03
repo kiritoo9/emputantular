@@ -1,0 +1,14 @@
+{
+    "name": "kst/emputantular",
+    "description": "PHP-JS simple framework",
+    "type": "composer-plugin",
+    "minimum-stability": "dev",
+    "require": {
+        "symfony/dotenv": "6.3.x-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "systems/"
+        }
+    }
+}

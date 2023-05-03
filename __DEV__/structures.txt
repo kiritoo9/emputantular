@@ -1,0 +1,29 @@
+-- Structures --
+
+/cores
+/commands
+/modules
+	/module_1
+		/routes
+		/controllers
+		/models
+		/views
+		config.php
+	/module_2
+		/routes
+		/controllers
+		/models
+		/views
+		config.php
+	index.php
+/assets
+	/images
+	/plugins
+		/empu_stylish
+			/css
+			/js
+
+index.php
+.gitignore
+composer.json
+README.md
