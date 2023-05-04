@@ -2,6 +2,18 @@
 
 namespace Core;
 
+/**
+ * Empu-Route Module
+ * -------
+ * Routes
+ * Handle routes from modules/routes.php
+ * Method supports: [GET, POST, PUT, DELETE]
+ * 
+ * @package Emputantular Core
+ * @author kiritoo9
+ * @version 2.0.0
+*/
+
 use Core\Core;
 
 class Routes extends Core
@@ -126,6 +138,7 @@ class Routes extends Core
 		} else if(count($pageHandler) < 1) {
 			$pageHandler = null;
 		} else {
+			$exists = false;
 			foreach ($pageHandler as $handler) {
 				$totalParams = count($handler['parameters']);
 				$path_array = explode('/', $path);
@@ -134,6 +147,7 @@ class Routes extends Core
 				}
 
 				if(count(explode('/', $handler['path'])) === count($path_array)) {
+					$exists = true;
 					$pageHandler = $handler['callback'];
 					foreach ($handler['parameters'] as $param) {
 						$paramHandler[$param['name']] = $param['value'];
@@ -141,6 +155,8 @@ class Routes extends Core
 					break;
 				}
 			}
+			if(!$exists)
+				$pageHandler = null;
 		}
 
 		if(!$pageHandler) {

@@ -2,6 +2,17 @@
 
 namespace Core;
 
+/**
+ * Empu-Libs Module
+ * -------
+ * Global libraries
+ * Bunch of default libraries, you can use everything you want
+ * 
+ * @package Emputantular Core
+ * @author kiritoo9
+ * @version 2.0.0
+*/
+
 class Libs
 {
 

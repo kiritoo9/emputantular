@@ -5,9 +5,11 @@ namespace Core;
 /**
  * Empu-Session Module
  * -------
- * Global session.
- * Stored in local storage, cached, or database
+ * Global session
+ * Stored in local storage, cookies, or database
  * 
+ * @package Emputantular Core
+ * @author kiritoo9
  * @version 2.0.0
 */
 

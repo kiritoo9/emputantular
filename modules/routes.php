@@ -31,7 +31,7 @@ $routes->get('/', function() {
 
 $routes->group('/masters', function($routes) {
     $routes->get('/users', UserController::class . '::index');
-    $routes->get('/users/{$email}/{$fullname}', UserController::class . '::detail');
+    $routes->get('/users/{$id}', UserController::class . '::detail');
 });
 
 $routes->run();

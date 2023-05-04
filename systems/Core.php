@@ -10,6 +10,8 @@ namespace Core;
  * - Database
  * - etc.
  * 
+ * @package Emputantular Core
+ * @author kiritoo9
  * @version 2.0.0
 */
 
