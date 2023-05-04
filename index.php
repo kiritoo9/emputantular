@@ -18,4 +18,4 @@ $app->init();
  * Load Routes
 */
 
-require __DIR__ . '/modules/index.php';
+require __DIR__ . '/modules/routes.php';

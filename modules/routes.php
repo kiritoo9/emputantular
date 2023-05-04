@@ -14,6 +14,13 @@ use Core\Routes;
 
 $routes = new Routes();
 
+/* Page not found handler */
+$routes->notFoundHandler(function() {
+    echo "Your page is not found";
+});
+
+
+/* Your main routes */
 $routes->get('/', function() {
     \Core\Libs::response([
         'appname' => \Core\Routes::$ENV['APP_NAME'] ?? 'Emputantular Framework',
@@ -21,9 +28,9 @@ $routes->get('/', function() {
     ]);
 });
 
-$routes->group('/main', function($routes) {
-    $routes->get('/about', function() {
-        echo "Hellow this is world";
+$routes->group('/masters', function($routes) {
+    $routes->get('/users', function() {
+        echo "Hellow this is users";
     });
 });
 
