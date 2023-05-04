@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Empu;
 
 /**
  * Empu-Session Module
@@ -13,7 +13,7 @@ namespace Core;
  * @version 2.0.0
 */
 
-class Session
+class Session extends Core
 {
 	public static function set()
 	{

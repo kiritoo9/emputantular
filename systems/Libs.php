@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Empu;
 
 /**
  * Empu-Libs Module
@@ -13,7 +13,7 @@ namespace Core;
  * @version 2.0.0
 */
 
-use Core\Core;
+use Empu\Core;
 
 class Libs extends Core
 {

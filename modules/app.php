@@ -7,7 +7,7 @@
 
 </head>
 <body>
-	<div id="emputantular-mainapp">
+	<div id="emputantular-rootapp">
 		<?php require_once __DIR__ . "/../modules/{$content}.php"; ?>
 	</div>
 </body>

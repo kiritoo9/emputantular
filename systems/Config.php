@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Core;
+namespace Empu;
 
 /**
  * Empu-Config Module
@@ -14,7 +14,7 @@ namespace Core;
  * @version 2.0.0
 */
 
-use Core\Core;
+use Empu\Core;
 
 class Config extends Core
 {

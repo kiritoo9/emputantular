@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Empu;
 
 /**
  * Empu-Core Module
@@ -16,7 +16,7 @@ namespace Core;
 */
 
 use Symfony\Component\Dotenv\Dotenv;
-use Core\Config;
+use Empu\Config;
 
 class Core
 {

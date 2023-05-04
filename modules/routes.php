@@ -10,20 +10,22 @@
  * @version  2.0.0
 */
 
-use Core\Routes;
+use Empu\Routes;
+use Empu\Libs;
+use Empu\Views;
 use Modules\Main\Controllers\UserController;
 
 $routes = new Routes();
 
 $routes->notFoundHandler(function() {
-    \Core\Views::render("main/views/errors/404");
+    Views::render("main/views/errors/404");
 });
 
 /* Main Routes */
 $routes->get('/', function() {
-    \Core\Libs::response([
-        'appname' => \Core\Routes::$ENV['APP_NAME'] ?? 'Emputantular Framework',
-        'version' => \Core\Routes::$ENV['APP_VERSION'] ?? '2.0.0',
+    Libs::response([
+        'appname' => Routes::$ENV['APP_NAME'] ?? 'Emputantular Framework',
+        'version' => Routes::$ENV['APP_VERSION'] ?? '2.0.0',
     ]);
 });
 

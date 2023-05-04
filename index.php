@@ -9,7 +9,7 @@
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Core\Core;
+use Empu\Core;
 
 $app = new Core();
 $app->init();

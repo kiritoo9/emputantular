@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Empu;
 
 /**
  * Empu-Route Module
@@ -14,7 +14,7 @@ namespace Core;
  * @version 2.0.0
 */
 
-use Core\Core;
+use Empu\Core;
 use Middlewares;
 
 class Routes extends Core
