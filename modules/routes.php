@@ -16,7 +16,7 @@ use Modules\Main\Controllers\UserController;
 $routes = new Routes();
 
 $routes->notFoundHandler(function() {
-    echo "Your page is not found";
+    \Core\Views::render("main/views/errors/404");
 });
 
 /* Main Routes */

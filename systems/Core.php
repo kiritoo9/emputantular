@@ -58,7 +58,7 @@ class Core
 		}
 	}
 
-	protected function debug($data, $withDie = false)
+	protected static function debug($data, $withDie = false)
 	{
 		echo "<pre>";
 		print_r($data);

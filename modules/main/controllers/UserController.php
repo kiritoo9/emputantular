@@ -8,11 +8,13 @@ class UserController extends Controller
 {
 	public function index()
 	{
-		echo "this is controller user";
+		\Core\Views::render("main/views/main_view");
 	}
 
 	public function detail($request)
 	{
-		$this->debug($request);
+		\Core\Views::render("main/views/main_view", [
+			'id' => $request['id']
+		]);
 	}
 }
