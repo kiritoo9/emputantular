@@ -55,4 +55,11 @@ class Core
 			$this->DB = $DB->psql_connect($DB_CONFIGS);
 		}
 	}
+
+	protected function debug($data, $withDie = false)
+	{
+		echo "<pre>";
+		print_r($data);
+		if($withDie) die;
+	}
 }

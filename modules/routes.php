@@ -11,6 +11,7 @@
 */
 
 use Core\Routes;
+use Modules\Main\Controllers\UserController;
 
 $routes = new Routes();
 
@@ -29,9 +30,8 @@ $routes->get('/', function() {
 });
 
 $routes->group('/masters', function($routes) {
-    $routes->get('/users', function() {
-        echo "Hellow this is users";
-    });
+    $routes->get('/users', UserController::class . '::index');
+    $routes->get('/users/{$email}/{$fullname}', UserController::class . '::detail');
 });
 
 $routes->run();
