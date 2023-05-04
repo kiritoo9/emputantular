@@ -13,7 +13,9 @@ namespace Core;
  * @version 2.0.0
 */
 
-class Libs
+use Core\Core;
+
+class Libs extends Core
 {
 
 	public static function response(array $res = []): void

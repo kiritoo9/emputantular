@@ -9,7 +9,8 @@
     "autoload": {
         "psr-4": {
             "Core\\": "systems/",
-            "Modules\\": "modules/"
+            "Modules\\": "modules/",
+            "Middlewares\\": "middlewares/"
         }
     }
 }

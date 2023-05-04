@@ -15,13 +15,11 @@ use Modules\Main\Controllers\UserController;
 
 $routes = new Routes();
 
-/* Page not found handler */
 $routes->notFoundHandler(function() {
     echo "Your page is not found";
 });
 
-
-/* Your main routes */
+/* Main Routes */
 $routes->get('/', function() {
     \Core\Libs::response([
         'appname' => \Core\Routes::$ENV['APP_NAME'] ?? 'Emputantular Framework',
@@ -31,7 +29,7 @@ $routes->get('/', function() {
 
 $routes->group('/masters', function($routes) {
     $routes->get('/users', UserController::class . '::index');
-    $routes->get('/users/{$id}', UserController::class . '::detail');
+    $routes->get('/users/{$id}', ['Auth'], UserController::class . '::detail');
 });
 
 $routes->run();

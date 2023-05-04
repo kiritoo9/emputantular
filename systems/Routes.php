@@ -15,6 +15,7 @@ namespace Core;
 */
 
 use Core\Core;
+use Middlewares;
 
 class Routes extends Core
 {
@@ -127,6 +128,7 @@ class Routes extends Core
 
 		$pageHandler = [];
 		$paramHandler = [];
+		$middlewareHandler = [];
 		foreach ($this->routes as $route) {
 			if(str_contains(strtolower($path), strtolower($route['path'])) && $route['method'] === $method) {
 				$pageHandler[] = $route;
@@ -149,6 +151,7 @@ class Routes extends Core
 				if(count(explode('/', $handler['path'])) === count($path_array)) {
 					$exists = true;
 					$pageHandler = $handler['callback'];
+					$middlewareHandler = $handler['middlewares'][0] ?? [];
 					foreach ($handler['parameters'] as $param) {
 						$paramHandler[$param['name']] = $param['value'];
 					}
@@ -164,7 +167,7 @@ class Routes extends Core
 			if($this->notFoundHandler) {
 				$pageHandler = $this->notFoundHandler;
 			} else {
-				echo "page is not found!";
+				require_once __DIR__ . '/errors/html/404.php';
 				return;
 			}
 		}
@@ -177,6 +180,23 @@ class Routes extends Core
 
 				$method = array_shift($parts);
 				$pageHandler = [$handler, $method];
+			}
+		}
+
+		/**
+		 * Handler middlewares
+		*/
+
+		if (is_array($middlewareHandler)) {
+			foreach ($middlewareHandler as $mware) {
+				$clsname = "\Middlewares\\{$mware}";
+				$middleware_init = new $clsname();
+				$response = $middleware_init->init($_SERVER);
+				if($response) {
+					header("HTTP/1.0 501 Unauthorized");
+					require_once __DIR__ . '/errors/html/501.php';
+					return;
+				}
 			}
 		}
 

@@ -14,7 +14,9 @@ namespace Core;
  * @version 2.0.0
 */
 
-class Config
+use Core\Core;
+
+class Config extends Core
 {
 	private $conn;
 
