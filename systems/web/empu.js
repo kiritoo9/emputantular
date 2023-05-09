@@ -9,11 +9,15 @@
 
 import * as component from './component.js'
 
-const root_element = document.getElementById("emputantular-rootapp")
-function init() {
-    function empuRouteHandler(route = '/') {
-        while(root_element.firstChild) {
-            root_element.lastChild.remove()
+class EmpuCore {
+
+    constructor(root_element) {
+        this.root_element = root_element
+    }
+    
+    empuRouteHandler(route = '/') {
+        while(this.root_element.firstChild) {
+            this.root_element.lastChild.remove()
         }
 
         /**
@@ -24,25 +28,50 @@ function init() {
 
         document.title = route
         window.history.pushState({state: 1}, "Detail Page" , route);
-        empuLoadHandler(route)
+        this.empuLoadHandler(route)
     }
 
-    document.querySelectorAll("a").forEach(anchor => {
-        const route = anchor.getAttribute('empu-route')
-        if(route !== undefined && route) {
-            anchor.style.cursor = 'pointer'
-            anchor.addEventListener("click", () => empuRouteHandler(route))
-        }
-    })
+    init() {
+        document.querySelectorAll("a").forEach(anchor => {
+            const route = anchor.getAttribute('empu-route')
+            if(route !== undefined && route) {
+                anchor.style.cursor = 'pointer'
+                anchor.addEventListener("click", () => this.empuRouteHandler(route))
+            }
+        })
+    }
+
+    empuXHRCall(method, url) {
+        return new Promise(function (resolve, reject) {
+            let xhr = new XMLHttpRequest();
+            xhr.open(method, url);
+            xhr.onload = function () {
+                if (this.status >= 200 && this.status < 300) {
+                    resolve(xhr.response);
+                } else {
+                    reject({
+                        status: this.status,
+                        statusText: xhr.statusText
+                    });
+                }
+            };
+            xhr.onerror = function () {
+                reject({
+                    status: this.status,
+                    statusText: xhr.statusText
+                });
+            };
+            xhr.send();
+        });
+    }
+
+    async empuLoadHandler(path) {
+        var req = await this.empuXHRCall("GET", path)
+        this.root_element.innerHTML = req
+        this.init()
+    }
+
 }
 
-function empuLoadHandler(path) {
-    var req = new XMLHttpRequest();
-    req.open("GET", path, false);
-    req.send(null);
-    
-    root_element.innerHTML = req.responseText;
-    init()
-}
-
-init()
+const core = new EmpuCore(document.getElementById("emputantular-rootapp"))
+core.init()
