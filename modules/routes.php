@@ -32,6 +32,7 @@ $routes->get('/', function() {
 $routes->group('/masters', function($routes) {
     $routes->get('/users', UserController::class . '::index');
     $routes->get('/users/{$id}', ['Auth'], UserController::class . '::detail');
+    
 });
 
 $routes->run();

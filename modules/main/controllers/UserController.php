@@ -9,12 +9,12 @@ class UserController extends Controller
 {
 	public function index()
 	{
-		Views::render("main/views/main_view");
+		Views::render("main/views/dashboard");
 	}
 
 	public function detail($request)
 	{
-		Views::render("main/views/main_view", [
+		Views::render("main/views/users/users", [
 			'id' => $request['id']
 		]);
 	}

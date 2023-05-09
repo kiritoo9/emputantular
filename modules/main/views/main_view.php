@@ -1,1 +1,0 @@
-<p>Main <?= isset($id) ? $id : 'View' ?></p>
