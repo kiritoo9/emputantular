@@ -1,3 +1,3 @@
 <p>Main <?= isset($id) ? $id : 'View' ?></p>
 
-<a empu-route="/masters/users/foo">To Detail!</a>
+<a empu-route="/masters/users/foo?id=123">To Detail!</a>

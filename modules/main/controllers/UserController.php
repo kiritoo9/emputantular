@@ -15,7 +15,8 @@ class UserController extends Controller
 	public function detail($request)
 	{
 		Views::render("main/views/users/users", [
-			'id' => $request['id']
+			'id' => $request['id'],
+			'idparams' => $_GET['id'] ?? null
 		]);
 	}
 }

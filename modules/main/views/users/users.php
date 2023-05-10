@@ -1,2 +1,4 @@
 <p>This is user page</p>
+<p>ID: <?= $id ?></p>
+<p>PARAMS ID: <?= $idparams ?></p>
 <a empu-route="/masters/users">Return home</a>

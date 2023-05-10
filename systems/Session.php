@@ -1,6 +1,7 @@
 <?php
 
 namespace Empu;
+session_start();
 
 /**
  * Empu-Session Module
@@ -15,14 +16,17 @@ namespace Empu;
 
 class Session extends Core
 {
-	public static function set()
+	public static function get($name = '')
 	{
-		echo "get session";
+		return $_SESSION[$name] ?? null;
 	}
 
-	public static function store()
+	public static function store($data = [])
 	{
-		echo "store session";
+		foreach ($data as $row => $value) {
+			$_SESSION[$row] = $value;
+		}
+		return true;
 	}
 
 	public static function delete()

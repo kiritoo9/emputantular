@@ -14,6 +14,20 @@ class EmpuCore {
     constructor(root_element) {
         this.root_element = root_element
     }
+
+    __validateParams(url = '') {
+        return url += (url.includes('?') ? '&' : '?' ) + `empuui=render`
+    }
+
+    empuCookieHandler(name,value,days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
     
     empuRouteHandler(route = '/') {
         while(this.root_element.firstChild) {
@@ -25,9 +39,9 @@ class EmpuCore {
          * Push State
          * Load html by route --> append to root_element
         */
-
         document.title = route
         window.history.pushState({state: 1}, "Detail Page" , route);
+        this.empuCookieHandler("empuui", true, 1)
         this.empuLoadHandler(route)
     }
 

@@ -16,6 +16,7 @@ namespace Empu;
 */
 
 use Empu\Core;
+use Empu\Session;
 
 class Views extends Core
 {
@@ -25,6 +26,12 @@ class Views extends Core
             ${$row} = $value;
         }
         ${"content"} = $path;
-		require_once __DIR__ . "/../modules/app.php";
+        $empuui = $_COOKIE['empuui'] ?? null;
+
+		require_once __DIR__ . "/../modules/". ($empuui ? $path : "app") .".php";
+        if($empuui) {
+            unset($_COOKIE['empuui']);
+            setcookie('empuui', '', time() - 3600, '/');
+        }
 	}
 }
