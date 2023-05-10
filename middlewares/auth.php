@@ -19,7 +19,7 @@ namespace Middlewares;
 
 class Auth
 {
-	public function init($request): bool
+	public function init($request, $params = null): bool
 	{
 		$unauthroized = false;
 		if(1 == 2) {

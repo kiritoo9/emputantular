@@ -189,9 +189,13 @@ class Routes extends Core
 
 		if (is_array($middlewareHandler)) {
 			foreach ($middlewareHandler as $mware) {
-				$clsname = "\Middlewares\\{$mware}";
+				$mware_arr = explode('::', $mware);
+				if(count($mware_arr) <= 0) 
+					break 1;
+
+				$clsname = "\Middlewares\\{$mware_arr[0]}";
 				$middleware_init = new $clsname();
-				$response = $middleware_init->init($_SERVER);
+				$response = $middleware_init->init($_SERVER, $mware_arr[1] ?? null);
 				if($response) {
 					header("HTTP/1.0 501 Unauthorized");
 					require_once __DIR__ . '/errors/html/501.php';

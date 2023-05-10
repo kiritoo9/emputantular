@@ -16,7 +16,7 @@ class EmpuCore {
     }
 
     __validateParams(url = '') {
-        return url += (url.includes('?') ? '&' : '?' ) + `empuui=render`
+        return url += (url.includes('?') ? '&' : '?' ) + `empuui=${true}`
     }
 
     empuCookieHandler(name,value,days) {
