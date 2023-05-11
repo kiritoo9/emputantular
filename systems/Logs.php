@@ -25,6 +25,7 @@ class Logs extends Core
             "Error: ".$err->getMessage().PHP_EOL.
             "Location: ".$err->getFile().' in line '.$err->getLine().PHP_EOL.PHP_EOL;
 
+        $limitError = 10;
         $assumedLine = 3;
         $countLine = 0;
         $filepath = './error.log';
@@ -42,7 +43,7 @@ class Logs extends Core
         }
         fclose($fh);
 
-        if($countLine > 0 && ($countLine/3) >= 10) {
+        if($countLine > 0 && ($countLine/$assumedLine) >= $limitError) {
             /** 
              * Remove the oldest error
              * assumed 3lines in every error (defined in var $log)
