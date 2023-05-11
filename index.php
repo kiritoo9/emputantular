@@ -6,16 +6,21 @@
  * @package  Emputantular Main
  * @author   KST Teams <aloha@kst.dev>
 */
+use Empu\Core;
+use Empu\Logs;
 
 require __DIR__ . '/vendor/autoload.php';
 
-use Empu\Core;
+try {
 
-$app = new Core();
-$app->init();
+    $app = new Core();
+    $app->init();
 
-/**
- * Load Routes
-*/
+    /**
+     * Load Routes
+    */
+    require __DIR__ . '/modules/routes.php';
 
-require __DIR__ . '/modules/routes.php';
+} catch(Throwable $empuErrHandler) {
+    Logs::empuErrHandler($empuErrHandler);
+}
