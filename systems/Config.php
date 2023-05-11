@@ -22,22 +22,22 @@ class Config extends Core
 
 	public function psql_connect($configs = null)
 	{
-		// try {
-		// 	$DSN = "pgsql:host={$configs->DB_HOST};port={$configs->DB_PORT};dbname={$configs->DB_NAME};";
-		// 	return new PDO(
-		// 		$DSN,
-		// 		$configs->DB_USER,
-		// 		$configs->DB_PASSWORD,
-		// 		[PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-		// 	);
-		// } catch (PDOException $e) {
-		// 	die($e->getMessage());
-		// }
+		try {
+			$DSN = "pgsql:host={$configs->DB_HOST};port={$configs->DB_PORT};dbname={$configs->DB_NAME};";
+			return new \PDO(
+				$DSN,
+				$configs->DB_USER,
+				$configs->DB_PASS,
+				[\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]
+			);
+		} catch (PDOException $e) {
+			die($e->getMessage());
+		}
 	}
 
 	public function mysql_connect($configs = null)
 	{
-		
+		// DEVELOPMENT HELD
 	}
 
 
