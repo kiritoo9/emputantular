@@ -21,7 +21,7 @@ use Empu\Config;
 class Core
 {
 
-	public $DB;
+	public $DB = 'hehey';
 
 	protected function _loadEnv()
 	{

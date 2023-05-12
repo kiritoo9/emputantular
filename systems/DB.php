@@ -24,8 +24,8 @@ class DB extends Core
     public array $global_where = [];
     public array $global_join = [];
     public array $global_order = [];
-    public int $global_limit;
-    public int $global_offset;
+    public int $global_limit = 0;
+    public int $global_offset = 0;
 
     public function table($tablename)
     {
@@ -36,7 +36,7 @@ class DB extends Core
 	public function select(...$params)
 	{
         for($i=0; $i<count($params);$i++) {
-            array_push($this->global_select, $params[$i]);
+            $this->global_select[] = $params[$i];
         }
         return $this;
 	}
@@ -52,27 +52,27 @@ class DB extends Core
             'operator' => $operator,
             'value' => $value
         ];
-        array_push($this->global_where, $w);
+        $this->global_where[] = $w;
         return $this;
     }
 
     public function join($tableTarget, $firstKey, $secondKey, $type = 'LEFT')
     {
-        array_push($this->global_join, [
+        $this->global_join[] = [
             'tableTarget' => $tableTarget,
             'firstKey' => $firstKey,
             'secondKey' => $secondKey,
             'type' => $type
-        ]);
+        ];
         return $this;
     }
 
     public function orderBy($field, $type = 'ASC')
     {
-        array_push($this->global_order, [
+        $this->global_order[] = [
             'field' => $field,
             'type' => $type
-        ]);
+        ];
         return $this;
     }
 
@@ -90,17 +90,17 @@ class DB extends Core
 
     public function get()
     {
-        $this->translateQuery('all');
+        return $this->translateQuery('all');
     }
 
     public function first()
     {
-        $this->translateQuery('first');
+        return $this->translateQuery('first');
     }
 
     public function raw(String $raw)
     {
-        $this->executeQuery($raw);
+        return $this->executeQuery($raw);
     }
 
     /**
@@ -110,12 +110,13 @@ class DB extends Core
      * @var string type = all|first
      **/
 
-    private function translateQuery($type = 'all'): void
+    private function translateQuery($type = 'all')
     {
         $query = "SELECT ";
         foreach ($this->global_select as $rs => $vs) {
             $query .= ($rs === 0 ? null : ',')." {$vs} ";
         }
+        if(count($this->global_select) <= 0) $query .= " * ";
         $query .= " FROM {$this->global_table} ";
 
         foreach ($this->global_join as $rj => $vj) {
@@ -143,21 +144,32 @@ class DB extends Core
         }
 
         if(strtolower($type) === 'all') {
-            if($this->global_limit) {
-                $query .= " LIMIT {$this->global_limit} ";
-                $query .= " OFFSET {$this->global_offset} ";
-            }
+            if($this->global_limit && $this->global_limit > 0) $query .= " LIMIT {$this->global_limit} ";
+            if($this->global_offset && $this->global_offset > 0) $query .= " OFFSET {$this->global_offset} ";
         } else if(strtolower($type) === 'first') {
             $query .= " LIMIT 1 OFFSET 0 ";
         }
 
-        $this->executeQuery($query);
+       return $this->executeQuery($query, $type);
     }
 
-    private function executeQuery(String $raw = ''): void 
+    private function executeQuery(String $raw = '', String $type = 'all')
     {
-        echo "<pre>";
-        print_r($raw);
+        $this->init(); // OPEN CONNECTION
+        $response = $this->DB->query($raw);
+        $data = [];
+        $index = 0;
+        while($row = $response->fetch(\PDO::FETCH_ASSOC)) {
+            if(strtolower($type) === 'all') {
+                $data[] = $row;
+            } else if(strtolower($type) === 'first' && $index === 0) {
+                $data = $row;
+                break;
+            }
+            $index++;
+        }
+        $this->DB = null; // CLOSE CONNECTION
+        return $data;
     }
 
 }

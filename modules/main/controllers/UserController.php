@@ -12,18 +12,10 @@ class UserController extends Controller
 	{
 		$DB = new DB();
 
-		$DB->table('mytable')
-			->select('id','username')
-			->where('id', '1')
-			->where('username', '=', 'naruto')
-			->where('deleted', null)
-			->join('detail_table', 'detail_table.id_mytable', 'mytable.id', 'LEFT')
-			->orderBy('mytable.created_date', 'ASC')
-			->orderBy('detail_table.created_date', 'ASC')
-			->limit(10)
-			->offset(0)
-			->get();
+		$data = $DB->table('mytable')->get();
 
+		echo "<pre>";
+		print_r($data);
 		die;
 		
 		Views::render("main/views/dashboard");
