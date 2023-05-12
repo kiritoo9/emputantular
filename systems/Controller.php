@@ -16,11 +16,14 @@ namespace Empu;
 */
 
 use Empu\Core;
+use Empu\DB;
 
 class Controller extends Core
 {
+    public $DB;
+
 	public function __construct()
 	{
-		
+		$this->DB = new DB();
 	}
 }

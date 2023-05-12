@@ -161,9 +161,9 @@ class DB extends Core
         $index = 0;
         while($row = $response->fetch(\PDO::FETCH_ASSOC)) {
             if(strtolower($type) === 'all') {
-                $data[] = $row;
+                $data[] = (object)$row;
             } else if(strtolower($type) === 'first' && $index === 0) {
-                $data = $row;
+                $data = (object)$row;
                 break;
             }
             $index++;
