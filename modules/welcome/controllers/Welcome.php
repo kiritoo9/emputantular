@@ -5,6 +5,7 @@
  * Validate with EmpuCoreApp for prevent direct access from url
  * 
  * @var EmpuCoreApp
+ * @var string title that you send to view will replace title inside <title> element automatically
  * */
 
 namespace Modules\Welcome\Controllers;
@@ -24,6 +25,7 @@ class Welcome extends Controller
 		$quote = "Many people say it’s easier to learn a language when you are young but there are advantages to learning a language when you are older.";
 		
 		Views::render("welcome/views/welcome", [
+			'title' => 'Welcome page',
 			'quote' => $quote
 		]);
 	}
