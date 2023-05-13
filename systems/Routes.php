@@ -136,7 +136,11 @@ class Routes extends Core
 		}
 
 		if(count($pageHandler) === 1) {
-			$pageHandler = $pageHandler[0]['callback'];
+			if(strtolower($pageHandler[0]['path']) === strtolower(($path == '/' ? '' : $path))) {
+				$pageHandler = $pageHandler[0]['callback'];
+			} else {
+				$pageHandler = null;
+			}
 		} else if(count($pageHandler) < 1) {
 			$pageHandler = null;
 		} else {
@@ -149,6 +153,9 @@ class Routes extends Core
 				}
 
 				if(count(explode('/', $handler['path'])) === count($path_array)) {
+					if($totalParams <= 0) {
+						if(strtolower($path) !== strtolower($handler['path'])) break;
+					}
 					$exists = true;
 					$pageHandler = $handler['callback'];
 					$middlewareHandler = $handler['middlewares'][0] ?? [];

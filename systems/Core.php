@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace Empu;
 
@@ -18,10 +18,12 @@ namespace Empu;
 use Symfony\Component\Dotenv\Dotenv;
 use Empu\Config;
 
+define("EmpuCoreApp", TRUE);
+
 class Core
 {
 
-	public $DB = 'hehey';
+	public $database_connection;
 
 	protected function _loadEnv()
 	{
@@ -52,10 +54,16 @@ class Core
 		) $use_database = true;
 
 		if($use_database && $DB_CONFIGS->DB_DRIVER == 'postgre') {
-			$this->DB = $DB->psql_connect($DB_CONFIGS);
+			$this->database_connection = $DB->psql_connect($DB_CONFIGS);
 		} elseif($use_database && $DB_CONFIGS->DB_DRIVER == 'mysql') {
-			$this->DB = $DB->psql_connect($DB_CONFIGS);
+			$this->database_connection = $DB->psql_connect($DB_CONFIGS);
 		}
+	}
+
+	public static function preventDirectUrl()
+	{
+		echo "hehe";
+		die('wtf?!!');
 	}
 
 	protected static function debug($data, $withDie = false)

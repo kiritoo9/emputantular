@@ -1,4 +1,4 @@
-<?php
+<?php if(!defined('EmpuCoreApp')) exit('You cannot access the file directly bro!');
 
 /**
  * Empu-ModRoutes
@@ -13,12 +13,12 @@
 use Empu\Routes;
 use Empu\Libs;
 use Empu\Views;
-use Modules\Main\Controllers\UserController;
+use Modules\Welcome\Controllers\Welcome;
 
 $routes = new Routes();
 
 $routes->notFoundHandler(function() {
-    Views::render("main/views/errors/404");
+    Views::render("welcome/views/errors/404");
 });
 
 /* Main Routes */
@@ -29,9 +29,9 @@ $routes->get('/', function() {
     ]);
 });
 
-$routes->group('/masters', function($routes) {
-    $routes->get('/users', UserController::class . '::index');
-    $routes->get('/users/{$id}', ['Auth::manager'], UserController::class . '::detail');
+$routes->group('/module', function($routes) {
+    $routes->get('/welcome', Welcome::class . '::index');
+    $routes->get('/welcome/{$id}', ['Auth::manager'], Welcome::class . '::detail');
     
 });
 

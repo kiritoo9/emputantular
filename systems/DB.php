@@ -156,7 +156,7 @@ class DB extends Core
     private function executeQuery(String $raw = '', String $type = 'all')
     {
         $this->init(); // OPEN CONNECTION
-        $response = $this->DB->query($raw);
+        $response = $this->database_connection->query($raw);
         $data = [];
         $index = 0;
         while($row = $response->fetch(\PDO::FETCH_ASSOC)) {
@@ -168,7 +168,7 @@ class DB extends Core
             }
             $index++;
         }
-        $this->DB = null; // CLOSE CONNECTION
+        $this->database_connection = null; // CLOSE CONNECTION
         return $data;
     }
 

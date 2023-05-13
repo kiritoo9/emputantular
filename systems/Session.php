@@ -1,6 +1,7 @@
 <?php
 
 namespace Empu;
+ob_clean();
 session_start();
 
 /**
@@ -16,12 +17,12 @@ session_start();
 
 class Session extends Core
 {
-	public static function get($name = '')
+	public static function get(String $name = '')
 	{
 		return $_SESSION[$name] ?? null;
 	}
 
-	public static function store($data = [])
+	public static function store(array $data = []): bool
 	{
 		foreach ($data as $row => $value) {
 			$_SESSION[$row] = $value;
@@ -29,8 +30,14 @@ class Session extends Core
 		return true;
 	}
 
-	public static function delete()
+	public static function unset(String $name = ''): void
 	{
-		echo "delete session";
+		unset($_SESSION[$name]);
+	}
+
+	public static function destroy(): void
+	{
+		session_unset();
+		session_destroy();
 	}
 }

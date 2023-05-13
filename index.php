@@ -32,12 +32,16 @@ try {
 
     /**
      * Load Core
+     * --> make sure database connected
+     * 
      * Module routes are included
     */
 
     $app = new Core();
     $app->init();
-    require __DIR__ . '/modules/routes.php';
+    $app->database_connection = null;
+
+    require_once __DIR__ . '/modules/routes.php';
 
 } catch(Throwable $empuErrHandler) {
     Logs::empuErrHandler($empuErrHandler);

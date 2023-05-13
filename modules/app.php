@@ -1,3 +1,4 @@
+<?php if(!defined('EmpuCoreApp')) exit('You cannot access the file directly bro!'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
