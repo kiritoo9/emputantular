@@ -98,6 +98,32 @@ class DB extends Core
         return $this->translateQuery('first');
     }
 
+    public function insert(array $data = [])
+    {
+        $query = "INSERT INTO {$this->global_table} ";
+        $value_str = "";
+        $index = 0;
+        foreach ($data as $row => $value) {
+            $value = is_string($value) ? " '{$value}' " : $value;
+
+            $query .= ($index === 0 ? '(' : null)." {$row} ".($index < (count($data)-1) ? ',' : ')');
+            $value_str .= ($index === 0 ? '(' : null)." {$value} ".($index < (count($data)-1) ? ',' : ')');
+            $index++;
+        }
+        $query = "{$query} VALUES {$value_str};";
+        return $this->executeQuery($query);
+    }
+
+    public function update(array $data = [])
+    {
+
+    }
+
+    public function delete($key = null)
+    {
+
+    }
+
     public function raw(String $raw)
     {
         return $this->executeQuery($raw);
