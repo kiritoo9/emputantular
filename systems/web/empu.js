@@ -7,16 +7,17 @@
  * @author jonsnow
 */
 
-import * as component from './component.js'
+import * as component from './component.js';
 
 class EmpuCore {
 
     constructor(root_element) {
-        this.root_element = root_element
+        this.root_element = root_element;
+        this.preloader_id = "emputantular-preloader";
     }
 
     __validateParams(url = '') {
-        return url += (url.includes('?') ? '&' : '?' ) + `empuui=${true}`
+        return url += (url.includes('?') ? '&' : '?' ) + `empuui=${true}`;
     }
 
     empuCookieHandler(name,value,days) {
@@ -30,27 +31,32 @@ class EmpuCore {
     }
     
     empuRouteHandler(route = '/') {
-        while(this.root_element.firstChild) {
-            this.root_element.lastChild.remove()
-        }
-
         /**
-         * Clear DOM
-         * Push State
+         * Open preloader
+         * Push state
+         * Remove all elements
          * Load html by route --> append to root_element
         */
-        document.title = route
+
+        this.root_element.style.position = 'absolute';
+        this.root_element.style.backgroundColor = "rgba(100, 100, 100, 0.4)";
+
+        const __preloader = document.createElement('div');
+        __preloader.setAttribute('id', this.preloader_id);
+        this.root_element.prepend(__preloader);
+
+        document.title = route;
         window.history.pushState({state: 1}, "Detail Page" , route);
-        this.empuCookieHandler("empuui", true, 1)
-        this.empuLoadHandler(route)
+        this.empuCookieHandler("empuui", true, 1);
+        this.empuLoadHandler(route);
     }
 
     init() {
         document.querySelectorAll("a").forEach(anchor => {
-            const route = anchor.getAttribute('empu-route')
+            const route = anchor.getAttribute('empu-route');
             if(route !== undefined && route) {
-                anchor.style.cursor = 'pointer'
-                anchor.addEventListener("click", () => this.empuRouteHandler(route))
+                anchor.style.cursor = 'pointer';
+                anchor.addEventListener("click", () => this.empuRouteHandler(route));
             }
         })
     }
@@ -80,12 +86,17 @@ class EmpuCore {
     }
 
     async empuLoadHandler(path) {
-        var req = await this.empuXHRCall("GET", path)
-        this.root_element.innerHTML = req
-        this.init()
+        var req = await this.empuXHRCall("GET", path);
+        while(this.root_element.firstChild) {
+            this.root_element.lastChild.remove();
+        }
+        this.root_element.innerHTML = req;
+        this.root_element.style.position = 'static';
+        this.root_element.style.backgroundColor = "transparent";
+        this.init();
     }
 
 }
 
-const core = new EmpuCore(document.getElementById("emputantular-rootapp"))
-core.init()
+const core = new EmpuCore(document.getElementById("emputantular-rootapp"));
+core.init();
