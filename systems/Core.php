@@ -17,6 +17,7 @@ namespace Empu;
 
 use Symfony\Component\Dotenv\Dotenv;
 use Empu\Config;
+use Empu\Session;
 
 define("EmpuCoreApp", TRUE);
 
@@ -25,7 +26,7 @@ class Core
 
 	public $database_connection;
 
-	protected function _loadEnv()
+	protected function __loadEnv()
 	{
 		$dotenv = new Dotenv();
 		$dotenv->load(__DIR__.'/../.env');
@@ -33,7 +34,7 @@ class Core
 
 	public function init(): void
 	{
-		$this->_loadEnv();
+		$this->__loadEnv();
 
 		$DB = new Config();
 
@@ -58,12 +59,13 @@ class Core
 		} elseif($use_database && $DB_CONFIGS->DB_DRIVER == 'mysql') {
 			$this->database_connection = $DB->psql_connect($DB_CONFIGS);
 		}
-	}
 
-	public static function preventDirectUrl()
-	{
-		echo "hehe";
-		die('wtf?!!');
+		if($this->database_connection) {
+			$SESS_DRIVER = $_ENV['CONF_SESS_DRIVER'] ?? null;
+			if($SESS_DRIVER && strtolower($SESS_DRIVER) === 'database') {
+				Session::createSession($this->database_connection);
+			}
+		}
 	}
 
 	protected static function debug($data, $withDie = false)

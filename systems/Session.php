@@ -15,11 +15,39 @@ session_start();
  * @version 2.0.0
 */
 
+use Empu\DB;
+
 class Session extends Core
 {
-	public static function get(String $name = '')
+
+	public static function createSession($conn = null): void
 	{
-		return $_SESSION[$name] ?? null;
+		if($conn) {
+			$conn->query("
+				CREATE TABLE IF NOT EXISTS empu_sessions(
+					sess_name text,
+					sess_value text,
+					sess_code text,
+					sess_created timestamp
+				)
+			");
+		}
+	}
+
+	public static function get(string $name = ''): string
+	{
+		$driver = $_ENV['CONF_SESS_DRIVER'] ?? 'cache';
+		if (strtolower($driver) == 'cache') {
+			return $_SESSION[$name] ?? null;
+		} else if(strtolower($driver) == 'database') {
+			$__db = new DB();
+			$__response = $__db->table('empu_sessions')
+				->where('sess_name', $name)
+				->first();
+
+			$__db = null;
+			return $__response ? $__response->sess_value : null;
+		}
 	}
 
 	public static function store(array $data = []): bool
@@ -30,7 +58,7 @@ class Session extends Core
 		return true;
 	}
 
-	public static function unset(String $name = ''): void
+	public static function unset(string $name = ''): void
 	{
 		unset($_SESSION[$name]);
 	}
