@@ -16,19 +16,11 @@ if(!defined('EmpuCoreApp')) exit('You cannot access the file directly bro!');
 
 use Empu\Controller;
 use Empu\Views;
-use Empu\Session;
 
 class Welcome extends Controller
 {
 	public function index()
 	{
-		Session::store([
-			'user_id' => 1,
-		]);
-		$user_id = Session::get('user_id');
-		print_r($user_id);
-		die;
-
 		$quote = "Many people say it’s easier to learn a language when you are young but there are advantages to learning a language when you are older.";
 		
 		Views::render("welcome/views/welcome", [

@@ -68,17 +68,35 @@ class Session extends Core
 				]);
 			}
 		}
+
+		if($__db) $__db = null;
 		return true;
 	}
 
 	public static function unset(string $name = ''): void
 	{
-		unset($_SESSION[$name]);
+		$driver = $_ENV['CONF_SESS_DRIVER'] ?? 'cache';
+		if (strtolower($driver) === 'cache') {
+			unset($_SESSION[$name]);
+		} else if(strtolower($driver) === 'database') {
+			$__db = new DB();
+			$__db->table('empu_sessions')
+				->where('sess_name', $name)
+				->delete();
+			$__db = null;
+		}
 	}
 
 	public static function destroy(): void
 	{
-		session_unset();
-		session_destroy();
+		$driver = $_ENV['CONF_SESS_DRIVER'] ?? 'cache';
+		if (strtolower($driver) === 'cache') {
+			session_unset();
+			session_destroy();
+		} else if(strtolower($driver) === 'database') {
+			$__db = new DB();
+			$__db->table('empu_sessions')->raw('DELETE FROM empu_sessions');
+			$__db = null;
+		}
 	}
 }

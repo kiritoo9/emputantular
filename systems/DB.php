@@ -116,12 +116,30 @@ class DB extends Core
 
     public function update(array $data = [])
     {
+        if(count($this->global_where) <= 0) throw new \Exception('You did not define conditions yet!');
 
+        $query = "UPDATE {$this->global_table} SET ";
+        $index = 0;
+        foreach ($data as $row => $value) {
+            $value_to_int = (int)$value;
+            $value = $value_to_int === 0 ? " '{$value}' " : $value;
+            $query .= " {$row} = {$value} ".($index < (count($data)-1) ? ',' : null);
+
+            $index++;
+        }
+        $query .= $this->translateWhere();
+        
+        return $this->executeQuery($query);
     }
 
-    public function delete($key = null)
+    public function delete()
     {
+        if(count($this->global_where) <= 0) throw new \Exception('You did not define conditions yet!');
 
+        $query = "DELETE FROM {$this->global_table} ";
+        $query .= $this->translateWhere();
+        
+        return $this->executeQuery($query);
     }
 
     public function raw(String $raw)
@@ -135,6 +153,19 @@ class DB extends Core
      * Generate to sql query
      * @var string type = all|first
      **/
+
+    private function translateWhere(): string
+    {
+        $query = "";
+        foreach ($this->global_where as $row => $value) {
+            $value = (object)$value;
+            $__value = is_string($value->value) ? " '{$value->value}' " : $value->value;
+
+            $query .= ($row === 0 ? " WHERE " : null)." {$value->field} = {$__value} ".($row < (count($this->global_where)-1) ? " AND " : null);
+        }
+
+        return $query;
+    }
 
     private function translateQuery($type = 'all')
     {
