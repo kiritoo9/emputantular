@@ -147,6 +147,11 @@ class DB extends Core
         return $this->executeQuery($raw);
     }
 
+    public function exec(String $raw)
+    {
+        return $this->executeQuery($raw, 'all', 'exec');
+    }
+
     /**
      * 
      * Core libs
@@ -210,21 +215,27 @@ class DB extends Core
        return $this->executeQuery($query, $type);
     }
 
-    private function executeQuery(String $raw = '', String $type = 'all')
+    private function executeQuery(String $raw = '', String $type = 'all', String $exec_type = null)
     {
         $this->init(); // OPEN CONNECTION
-        $response = $this->database_connection->query($raw);
+
         $data = [];
-        $index = 0;
-        while($row = $response->fetch(\PDO::FETCH_ASSOC)) {
-            if(strtolower($type) === 'all') {
-                $data[] = (object)$row;
-            } else if(strtolower($type) === 'first' && $index === 0) {
-                $data = (object)$row;
-                break;
+        if($exec_type === 'exec') {
+            $data = $this->database_connection->exec($raw);
+        } else {
+            $response = $this->database_connection->query($raw);
+            $index = 0;
+            while($row = $response->fetch(\PDO::FETCH_ASSOC)) {
+                if(strtolower($type) === 'all') {
+                    $data[] = (object)$row;
+                } else if(strtolower($type) === 'first' && $index === 0) {
+                    $data = (object)$row;
+                    break;
+                }
+                $index++;
             }
-            $index++;
         }
+
         $this->database_connection = null; // CLOSE CONNECTION
         return $data;
     }

@@ -95,7 +95,7 @@ class Session extends Core
 			session_destroy();
 		} else if(strtolower($driver) === 'database') {
 			$__db = new DB();
-			$__db->table('empu_sessions')->raw('DELETE FROM empu_sessions');
+			$__db->raw('DELETE FROM empu_sessions');
 			$__db = null;
 		}
 	}

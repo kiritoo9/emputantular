@@ -1,3 +1,4 @@
 /vendor
 .env
 error.log
+composer.lock

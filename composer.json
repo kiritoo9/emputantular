@@ -9,6 +9,7 @@
     "autoload": {
         "psr-4": {
             "Empu\\": "systems/",
+            "Migrations\\": "databases/migrations/",
             "Modules\\": "modules/",
             "Middlewares\\": "middlewares/"
         }
