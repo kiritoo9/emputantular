@@ -33,7 +33,7 @@ class Heroes extends Controller
 	public function add()
 	{
 		Views::render("welcome/views/heroes/add", [
-			'title' => 'List Heroes',
+			'title' => 'Add Heroes',
 		]);
 	}
 }

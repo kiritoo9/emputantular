@@ -10,7 +10,7 @@
 </head>
 <body>
 	<div id="emputantular-rootapp">
-		<?php require_once __DIR__ . "/../modules/{$content}.php"; ?>
+		<?php require_once __DIR__ . "/../modules/{$__empuContent}.php"; ?>
 	</div>
 
 	<!-- EMPU.JS CORE -->

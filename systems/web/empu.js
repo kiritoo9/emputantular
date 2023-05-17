@@ -22,6 +22,15 @@ class EmpuCore {
         return url += (url.includes('?') ? '&' : '?' ) + `empuui=${true}`;
     }
 
+    __openLoader() {
+        this.root_element.style.position = 'absolute';
+        this.root_element.style.backgroundColor = "rgba(100, 100, 100, 0.4)";
+
+        const __preloader = document.createElement('div');
+        __preloader.setAttribute('id', this.preloader_id);
+        this.root_element.prepend(__preloader);
+    }
+
     __removeLoader(fail = false) {
         if(!fail) {
             for(let i=0; i<this.__bindedEl.length; ++i) {
@@ -62,13 +71,7 @@ class EmpuCore {
 
                 var _this = this;
                 function empuRouteHandler() {
-                    _this.root_element.style.position = 'absolute';
-                    _this.root_element.style.backgroundColor = "rgba(100, 100, 100, 0.4)";
-
-                    const __preloader = document.createElement('div');
-                    __preloader.setAttribute('id', _this.preloader_id);
-                    _this.root_element.prepend(__preloader);
-
+                    _this.__openLoader();
                     _this.empuLoadHandler(route);
                 }
                 anchor.addEventListener("click", empuRouteHandler);
@@ -119,15 +122,28 @@ class EmpuCore {
             while(this.root_element.firstChild) {
                 this.root_element.lastChild.remove();
             }
-            
-            document.title = route;
-            window.history.pushState({state: 1}, "Detail Page" , route);
+
+            let __arrCookies = document.cookie.split(";");
+            let __strTitle = __arrCookies.length > 0 ? __arrCookies[0] : null;
+            const __cookieName = `activeTitle=`;
+            if(__strTitle) {
+                while (__strTitle.charAt(0) == ' ') { 
+                    __strTitle = __strTitle.substring(1,__strTitle.length);
+                }
+                if (__strTitle.indexOf(__cookieName) == 0){
+                    __strTitle = __strTitle.substring(__cookieName.length,__strTitle.length);
+                }
+            } else {
+                __strTitle = "Emputantular";
+            }
+
+            document.title = decodeURI(__strTitle);
+            window.history.pushState({state: 1}, __strTitle , route);
             this.root_element.innerHTML = req;
             this.__removeLoader();
         } catch(err) {
             let err_str = err;
             if(err.statusText !== undefined) err_str = err.statusText;
-
             this.__removeLoader(true);
             alert(`Woooppss page is ${err_str}`)
         }
@@ -135,5 +151,15 @@ class EmpuCore {
 
 }
 
+/**
+ * Initialize DOM Core
+ * Binding HashChange
+ * */
+
 const core = new EmpuCore(document.getElementById("emputantular-rootapp"));
 core.init();
+
+window.addEventListener('popstate', function(event) {
+    core.__openLoader();
+    core.empuLoadHandler("/heroes");
+});

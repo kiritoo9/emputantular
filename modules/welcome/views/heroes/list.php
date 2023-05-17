@@ -1,7 +1,7 @@
 <div class="empu-container">
 	
 	<p class="empu-title">Empu Foundations</p>
-	<small>- List of heroes who ready to protect the world! </small>
+	<small>- List of heroes who ready to protect the world!</small>
 	<hr /><br />
 	<a empu-route="/heroes/add" class="empu-btn mt-30 empu-btn-primary">Add New Heroes</a>
 	<table class="empu-table mt-20" border="1">
