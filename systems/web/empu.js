@@ -23,9 +23,6 @@ class EmpuCore {
     }
 
     __removeLoader(fail = false) {
-        document.getElementById(this.preloader_id).remove();
-        this.root_element.style.position = 'static';
-        this.root_element.style.backgroundColor = "transparent";
         if(!fail) {
             for(let i=0; i<this.__bindedEl.length; ++i) {
                 const __v = this.__bindedEl[i];
@@ -34,7 +31,12 @@ class EmpuCore {
             this.__bindedEl=[];
 
             this.init();
+        } else {
+            document.getElementById(this.preloader_id).remove();
         }
+
+        this.root_element.style.position = 'static';
+        this.root_element.style.backgroundColor = "transparent";
     }
 
     empuCookieHandler(name,value,days) {
@@ -103,7 +105,7 @@ class EmpuCore {
         });
     }
 
-    async empuLoadHandler(path) {
+    async empuLoadHandler(route) {
         try {
             /** 
              * Push state, update title and url
@@ -111,19 +113,23 @@ class EmpuCore {
              * Load html by route --> append to root_element
              * */
 
-            var req = await this.empuXHRCall("GET", path);
+            this.empuCookieHandler("empuui", true, 1);
+
+            var req = await this.empuXHRCall("GET", route);
             while(this.root_element.firstChild) {
                 this.root_element.lastChild.remove();
             }
-            this.root_element.innerHTML = req;
+            
             document.title = route;
             window.history.pushState({state: 1}, "Detail Page" , route);
-            this.empuCookieHandler("empuui", true, 1);
-
+            this.root_element.innerHTML = req;
             this.__removeLoader();
         } catch(err) {
+            let err_str = err;
+            if(err.statusText !== undefined) err_str = err.statusText;
+
             this.__removeLoader(true);
-            alert(`Woooppss page is ${err.statusText}`)
+            alert(`Woooppss page is ${err_str}`)
         }
     }
 

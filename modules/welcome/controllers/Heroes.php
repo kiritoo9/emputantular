@@ -29,4 +29,11 @@ class Heroes extends Controller
 			'heroes' => $heroes
 		]);
 	}
+
+	public function add()
+	{
+		Views::render("welcome/views/heroes/add", [
+			'title' => 'List Heroes',
+		]);
+	}
 }
