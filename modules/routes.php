@@ -14,25 +14,29 @@ use Empu\Routes;
 use Empu\Libs;
 use Empu\Views;
 use Modules\Welcome\Controllers\Welcome;
+use Modules\Welcome\Controllers\Heroes;
 
 $routes = new Routes();
 
-$routes->notFoundHandler(function() {
-    Views::render("welcome/views/errors/404");
-});
+/**
+ * Init Routes
+ * -----
+ * 
+ * See route documentations to use Route Modules
+ * */
 
-/* Main Routes */
-$routes->get('/', function() {
-    Libs::response([
-        'appname' => Routes::$ENV['APP_NAME'] ?? 'Emputantular Framework',
-        'version' => Routes::$ENV['APP_VERSION'] ?? '2.0.0',
-    ]);
-});
+$routes->get('/', Welcome::class . '::index');
 
-$routes->group('/module', function($routes) {
-    $routes->get('/welcome', Welcome::class . '::index');
-    $routes->get('/welcome/{$id}', ['Auth::manager'], Welcome::class . '::detail');
-    
+/**
+ * CRUD Example
+ * -----
+ * 
+ * You can delete this routes after installation
+ * Module used /welcome
+ * */
+
+$routes->group('/heroes', function($routes) {
+    $routes->get('/', Heroes::class . '::index');
 });
 
 $routes->run();

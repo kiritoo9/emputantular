@@ -11,6 +11,8 @@ import * as component from './component.js';
 
 class EmpuCore {
 
+    __bindedEl = [];
+
     constructor(root_element) {
         this.root_element = root_element;
         this.preloader_id = "emputantular-preloader";
@@ -18,6 +20,21 @@ class EmpuCore {
 
     __validateParams(url = '') {
         return url += (url.includes('?') ? '&' : '?' ) + `empuui=${true}`;
+    }
+
+    __removeLoader(fail = false) {
+        document.getElementById(this.preloader_id).remove();
+        this.root_element.style.position = 'static';
+        this.root_element.style.backgroundColor = "transparent";
+        if(!fail) {
+            for(let i=0; i<this.__bindedEl.length; ++i) {
+                const __v = this.__bindedEl[i];
+                __v.el.removeEventListener(__v.event, __v.func);
+            }
+            this.__bindedEl=[];
+
+            this.init();
+        }
     }
 
     empuCookieHandler(name,value,days) {
@@ -29,34 +46,35 @@ class EmpuCore {
         }
         document.cookie = name + "=" + (value || "")  + expires + "; path=/";
     }
-    
-    empuRouteHandler(route = '/') {
-        /**
-         * Open preloader
-         * Push state
-         * Remove all elements
-         * Load html by route --> append to root_element
-        */
-
-        this.root_element.style.position = 'absolute';
-        this.root_element.style.backgroundColor = "rgba(100, 100, 100, 0.4)";
-
-        const __preloader = document.createElement('div');
-        __preloader.setAttribute('id', this.preloader_id);
-        this.root_element.prepend(__preloader);
-
-        document.title = route;
-        window.history.pushState({state: 1}, "Detail Page" , route);
-        this.empuCookieHandler("empuui", true, 1);
-        this.empuLoadHandler(route);
-    }
 
     init() {
         document.querySelectorAll("a").forEach(anchor => {
             const route = anchor.getAttribute('empu-route');
             if(route !== undefined && route) {
                 anchor.style.cursor = 'pointer';
-                anchor.addEventListener("click", () => this.empuRouteHandler(route));
+
+                /**
+                 * Open preloader
+                 * Call page open handler
+                */
+
+                var _this = this;
+                function empuRouteHandler() {
+                    _this.root_element.style.position = 'absolute';
+                    _this.root_element.style.backgroundColor = "rgba(100, 100, 100, 0.4)";
+
+                    const __preloader = document.createElement('div');
+                    __preloader.setAttribute('id', _this.preloader_id);
+                    _this.root_element.prepend(__preloader);
+
+                    _this.empuLoadHandler(route);
+                }
+                anchor.addEventListener("click", empuRouteHandler);
+                this.__bindedEl.push({
+                    el: anchor,
+                    event: "click",
+                    func: empuRouteHandler
+                });
             }
         })
     }
@@ -86,14 +104,27 @@ class EmpuCore {
     }
 
     async empuLoadHandler(path) {
-        var req = await this.empuXHRCall("GET", path);
-        while(this.root_element.firstChild) {
-            this.root_element.lastChild.remove();
+        try {
+            /** 
+             * Push state, update title and url
+             * Remove all elements
+             * Load html by route --> append to root_element
+             * */
+
+            var req = await this.empuXHRCall("GET", path);
+            while(this.root_element.firstChild) {
+                this.root_element.lastChild.remove();
+            }
+            this.root_element.innerHTML = req;
+            document.title = route;
+            window.history.pushState({state: 1}, "Detail Page" , route);
+            this.empuCookieHandler("empuui", true, 1);
+
+            this.__removeLoader();
+        } catch(err) {
+            this.__removeLoader(true);
+            alert(`Woooppss page is ${err.statusText}`)
         }
-        this.root_element.innerHTML = req;
-        this.root_element.style.position = 'static';
-        this.root_element.style.backgroundColor = "transparent";
-        this.init();
     }
 
 }

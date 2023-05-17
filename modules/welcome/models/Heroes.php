@@ -15,7 +15,7 @@ if(!defined('EmpuCoreApp')) exit('You cannot access the file directly bro!');
 
 use Empu\Model;
 
-class Welcome extends Model
+class Heroes extends Model
 {
 	protected string $table_name = '';
 	protected string $primary_key = '';

@@ -11,6 +11,73 @@ body {
     margin: 0;
     padding: 0;
 }
+
+/**
+ * Libraries
+ * */
+.mt-10 { margin-top:10px !important; }
+.mt-20 { margin-top:20px !important; }
+.mt-30 { margin-top:30px !important; }
+
+/**
+ * Default CSS
+ * 
+ * */
+
+.empu-container {
+    width: 80%;
+    margin: 20px auto;
+}
+p.empu-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    color: #2980b9;
+}
+.empu-container small {
+    font-size: 18px;
+}
+table.empu-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table.empu-table thead tr th {
+    padding: 8px;
+}
+table.empu-table tbody tr td {
+    padding: 12px;
+}
+
+.empu-btn {
+    width: auto;
+    height: auto;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #dedede;
+    text-decoration: none;
+    color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+.empu-btn.empu-btn-primary {
+    background-color: #2980b9;
+    color: white;
+}
+.empu-btn.empu-btn-info {
+    background-color: #16a085;
+    color: white;
+}
+.empu-btn.empu-btn-danger {
+    background-color: #c0392b;
+    color: white;
+}
+
+/**
+ * PRELOADER
+ * 
+ * */
 #emputantular-rootapp {
     width: 100%;
     height: 100%;
