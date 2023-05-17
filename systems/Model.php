@@ -196,6 +196,9 @@ class Model extends Core
      * Actions Handler
      * -----
      * 
+     * Schema Migration Up
+     * Schema Migration Down
+     * Commit Seed
      * */
 
     public function commit(): void
@@ -247,5 +250,18 @@ class Model extends Core
             exit("Drop table {$tablename} is successfully!"."\n");
         }
         exit('Something went wrong!'."\n");
+    }
+
+    public function seed(string $tablename = '', array $data = []): void
+    {
+        if($this->connection && $tablename && count($data) > 0) {
+            for($i=0; $i<count($data);$i++) {
+                $this->connection->table('heroes')->insert($data[$i]);
+            }
+            $this->connection = null;
+            exit("Seeding to table {$tablename} is completed!");
+        } else {
+            exit('Something went wrong when seeding your data!');
+        }
     }
 }

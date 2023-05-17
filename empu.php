@@ -69,5 +69,19 @@ class Manage
 
 }
 
+/**
+ * Run Apps
+ * -----
+ * 
+ * Check parameters
+ * */
+
+$params = getopt('params', ["help:"]);
+$help = isset($params['help']) ? strtolower($params['help']) : null;
+
 $app = new Manage();
-$app->run();
+if($help) {
+	$app->help();
+} else {
+	$app->run();
+}

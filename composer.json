@@ -10,6 +10,7 @@
         "psr-4": {
             "Empu\\": "systems/",
             "Migrations\\": "databases/migrations/",
+            "Seeders\\": "databases/seeders/",
             "Modules\\": "modules/",
             "Middlewares\\": "middlewares/"
         }

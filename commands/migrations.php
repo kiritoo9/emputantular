@@ -58,8 +58,10 @@ $filename = isset($params['filename']) ? strtolower($params['filename']) : null;
 $type = isset($params['type']) ? strtolower($params['type']) : 'up';
 
 /**
- * Take Action
+ * Action
  * -----
+ * 
+ * Code below will run when user input in terminal
  * */
 
 $em = new EmpuMigration($filename, $type);
