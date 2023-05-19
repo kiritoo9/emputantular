@@ -241,7 +241,7 @@ Which means Heroes is you filename /databases/seeders/heroes.php
 
 ## Authors
 
-- [@kiritoo99](https://www.github.com/kiritoo99)
+- [@kiritoo9](https://www.github.com/kiritoo9)
 
 
 ## Version
