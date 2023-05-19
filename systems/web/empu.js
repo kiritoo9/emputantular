@@ -58,7 +58,11 @@ class EmpuCore {
         document.cookie = name + "=" + (value || "")  + expires + "; path=/";
     }
 
-    init() {
+    init(firstInit = false) {
+        if(firstInit) {
+            this.handlerRouteHistories(window.location.pathname);
+        }
+
         document.querySelectorAll("a").forEach(anchor => {
             const route = anchor.getAttribute('empu-route');
             if(route !== undefined && route) {
@@ -108,16 +112,34 @@ class EmpuCore {
         });
     }
 
-    async empuLoadHandler(route) {
+    handlerRouteHistories(route, backward) {
+        let __histories = window.localStorage.getItem("__empuRouteHistories");
+        __histories = __histories ? JSON.parse(__histories) : [];
+        if(!backward) {
+            __histories.push(route);
+        } else if(__histories.length > 0) {
+            let __lastItem = (__histories.length-1);
+            __histories.splice(__lastItem, 1); // DELETE CURRENT PAGE FROM HISTORIES
+            __lastItem = (__histories.length-1); // GET ROUTES BEFORE
+
+            route = __histories[__lastItem] ?? "/";
+        }
+        window.localStorage.setItem("__empuRouteHistories", JSON.stringify(__histories));
+
+        return route;
+    }
+
+    async empuLoadHandler(route = "/", backward = null) {
         try {
             /** 
+             * Check backward, if true then remove last route
              * Push state, update title and url
              * Remove all elements
              * Load html by route --> append to root_element
              * */
 
+            route = this.handlerRouteHistories(route, backward);
             this.empuCookieHandler("empuui", true, 1);
-
             var req = await this.empuXHRCall("GET", route);
             while(this.root_element.firstChild) {
                 this.root_element.lastChild.remove();
@@ -125,13 +147,13 @@ class EmpuCore {
 
             let __arrCookies = document.cookie.split(";");
             let __strTitle = __arrCookies.length > 0 ? __arrCookies[0] : null;
-            const __cookieName = `activeTitle=`;
+            const __cookieTitle = `activeTitle=`;
             if(__strTitle) {
                 while (__strTitle.charAt(0) == ' ') { 
                     __strTitle = __strTitle.substring(1,__strTitle.length);
                 }
-                if (__strTitle.indexOf(__cookieName) == 0){
-                    __strTitle = __strTitle.substring(__cookieName.length,__strTitle.length);
+                if (__strTitle.indexOf(__cookieTitle) == 0){
+                    __strTitle = __strTitle.substring(__cookieTitle.length,__strTitle.length);
                 }
             } else {
                 __strTitle = "Emputantular";
@@ -157,9 +179,9 @@ class EmpuCore {
  * */
 
 const core = new EmpuCore(document.getElementById("emputantular-rootapp"));
-core.init();
+core.init(true);
 
 window.addEventListener('popstate', function(event) {
     core.__openLoader();
-    core.empuLoadHandler("/heroes");
+    core.empuLoadHandler(null, true);
 });
