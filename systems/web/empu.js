@@ -153,7 +153,7 @@ class EmpuCore {
 
 /**
  * Initialize DOM Core
- * Binding HashChange
+ * Binding HashChange in Browser
  * */
 
 const core = new EmpuCore(document.getElementById("emputantular-rootapp"));
