@@ -17,6 +17,7 @@ namespace Empu;
 
 use Empu\Core;
 use Empu\Session;
+use Empu\Logs;
 
 class Views extends Core
 {
@@ -27,13 +28,27 @@ class Views extends Core
             ${$row} = $value;
             if(strtolower($row) === 'title') $__setTitle = $value;
         }
-        ${"__empuContent"} = $path;
+        $__empuContent = $path;
         $empuui = $_COOKIE['empuui'] ?? null;
 
-		require_once __DIR__ . "/../modules/". ($empuui ? $path : "app") .".php";
+        /**
+         * Handle file not exists when user try to open view
+         * ------
+         * Remove empuui cache
+         * recall app.php to trigger try execption
+         */
+
+        // $resetEmpuui = false;
+        // if(!file_exists(__DIR__ . "/../modules/{$path}.php")) {
+        //     $empuui = null;
+        //     $resetEmpuui = true;
+        // }
+        
+        require_once __DIR__ . "/../modules/". ($empuui ? $path : "app") .".php";
         
         /**
-         * Reset Cookies
+         * Reset Empuui Cookies
+         * Update activeTitle
          * */
 
         if($empuui) {

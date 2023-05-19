@@ -38,6 +38,7 @@ $routes->get('/', Welcome::class . '::index');
 $routes->group('/heroes', function($routes) {
     $routes->get('/', Heroes::class . '::index');
     $routes->get('/add', Heroes::class . '::add');
+    $routes->get('/edit/{$id}', Heroes::class . '::edit');
 });
 
 $routes->run();

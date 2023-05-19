@@ -36,4 +36,21 @@ class Heroes extends Controller
 			'title' => 'Add Heroes',
 		]);
 	}
+
+	public function edit($request)
+	{
+		$id = $request['id'] ?? null;
+
+		$hero = $this->DB->table('heroes')->where('id', $id)->first();
+		if($hero) {
+			print_r($hero);
+			return;
+		} else {
+			return $this->redirectTo("/heroes");
+		}
+
+		Views::render("welcome/views/heroes/edit", [
+			'title' => 'Edit Heroes'
+		]);
+	}
 }

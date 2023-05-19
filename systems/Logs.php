@@ -17,7 +17,7 @@ use Empu\Core;
 class Logs extends Core
 {
 
-	public static function empuErrHandler($err): void
+	public static function empuErrHandler($err)
 	{
         date_default_timezone_set('Asia/Jakarta');
         $log = 
@@ -63,9 +63,19 @@ class Logs extends Core
             file_put_contents($filepath, $cleanContent);
         }
 
+        /**
+         * Remove empuui cookies
+         * Load errorHandler page
+         */
+
+        unset($_COOKIE['empuui']);
+        setcookie('empuui', '', -1, '/');
+
         file_put_contents($filepath, $log, FILE_APPEND);
         header("HTTP/1.0 400 Bad Request");
-        require_once __DIR__ . '/errors/html/errorHandler.php';
+
+        $__empuErrorContent = "errors/html/errorHandler";
+        require_once __DIR__ . "/../modules/app.php";
         return;
 	}
 

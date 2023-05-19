@@ -32,8 +32,9 @@ try {
 
     /**
      * Load Core
-     * --> make sure database connected
+     * ----------
      * 
+     * Connecting to database
      * Module routes are included
     */
 
@@ -42,7 +43,6 @@ try {
     $app->database_connection = null;
 
     require_once __DIR__ . '/modules/routes.php';
-
 } catch(Throwable $empuErrHandler) {
     Logs::empuErrHandler($empuErrHandler);
 }

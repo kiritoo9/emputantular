@@ -121,8 +121,7 @@ class DB extends Core
         $query = "UPDATE {$this->global_table} SET ";
         $index = 0;
         foreach ($data as $row => $value) {
-            $value_to_int = (int)$value;
-            $value = $value_to_int === 0 ? " '{$value}' " : $value;
+            $value = is_string($value) ? " '{$value}' " : $value;
             $query .= " {$row} = {$value} ".($index < (count($data)-1) ? ',' : null);
 
             $index++;
@@ -189,7 +188,7 @@ class DB extends Core
         if(count($this->global_where) > 0) $query .= " WHERE ";
         foreach ($this->global_where as $rw => $vw) {
             $vw = (object)$vw;
-            $_value = (int)$vw->value === 0 ? "'{$vw->value}'" : (int)$vw->value;
+            $_value = is_string($vw->value) ? "'{$vw->value}'" : $vw->value;
 
             if(is_null($_value)) {
                 $_value = ($vw->operator === '=' ? 'is' : 'is not')." null ";

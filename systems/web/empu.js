@@ -98,14 +98,16 @@ class EmpuCore {
                 } else {
                     reject({
                         status: this.status,
-                        statusText: xhr.statusText
+                        statusText: xhr.statusText,
+                        responseText: xhr.responseText,
                     });
                 }
             };
             xhr.onerror = function () {
                 reject({
                     status: this.status,
-                    statusText: xhr.statusText
+                    statusText: xhr.statusText,
+                    responseText: xhr.responseText,
                 });
             };
             xhr.send();
@@ -138,9 +140,10 @@ class EmpuCore {
              * Load html by route --> append to root_element
              * */
 
-            route = this.handlerRouteHistories(route, backward);
             this.empuCookieHandler("empuui", true, 1);
             var req = await this.empuXHRCall("GET", route);
+            route = this.handlerRouteHistories(route, backward);
+
             while(this.root_element.firstChild) {
                 this.root_element.lastChild.remove();
             }
@@ -165,9 +168,10 @@ class EmpuCore {
             this.__removeLoader();
         } catch(err) {
             let err_str = err;
-            if(err.statusText !== undefined) err_str = err.statusText;
+            if(err.responseText !== undefined) err_str = err.responseText;
             this.__removeLoader(true);
-            alert(`Woooppss page is ${err_str}`)
+            console.log(err_str);
+            // window.alert(`Woooppss page is ${err_str}`)
         }
     }
 

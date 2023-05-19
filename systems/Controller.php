@@ -26,4 +26,14 @@ class Controller extends Core
 	{
 		$this->DB = new DB();
 	}
+
+	public function redirectTo($route = "/")
+	{
+		echo "this one should be redirect to {$route}!";
+	}
+
+	public function redirectBack()
+	{
+		echo "this one should redirect to last page!";
+	}
 }
