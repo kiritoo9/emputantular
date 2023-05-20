@@ -64,7 +64,15 @@ class Controller extends Core
 		if($redirectUrl) $data['__empuRedirectUrl'] = $redirectUrl;
 		$data['__empuResponseMessage'] = $message;
 		echo json_encode($data);
-		return exit;
+		return exit();
+	}
+
+	public function redirectTo($redirectUrl = null, string $message = "")
+	{
+		if($redirectUrl) {
+			require_once __DIR__ . "/web/redirectHandler.php";
+		}
+		return exit();
 	}
 
 	public function uuidv4()

@@ -42,6 +42,7 @@ $routes->group('/heroes', function($routes) {
 
     $routes->post('/insert', Heroes::class . '::insert');
     $routes->post('/update', Heroes::class . '::update');
+    $routes->get('/delete/{$id}', Heroes::class . '::delete');
 });
 
 $routes->run();

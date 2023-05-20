@@ -23,7 +23,13 @@
 					<td><?= $value->secret_power ?></td>
 					<td>
 						<a empu-route="/heroes/edit/<?= $value->id ?>" class="empu-btn empu-btn-info">Edit</a>
-						<a empu-route="/heroes/delete/<?= $value->id ?>" onclick="return confirm('Are you sure?')" class="empu-btn empu-btn-danger">Delete</a>
+						<a 
+							empu-route="/heroes/delete/<?= $value->id ?>" 
+							empu-confirm="Are you sure to delete this data?" 
+							class="empu-btn empu-btn-danger"
+						>
+							Delete
+						</a>
 					</td>
 				</tr>
 			<?php endforeach ?>

@@ -204,8 +204,8 @@ class Routes extends Core
 				$middleware_init = new $clsname();
 				$response = $middleware_init->init($_SERVER, $mware_arr[1] ?? null);
 				if($response) {
-					header("HTTP/1.0 501 Unauthorized");
-					require_once __DIR__ . '/errors/html/501.php';
+					header("HTTP/1.0 401 Unauthorized");
+					require_once __DIR__ . '/errors/html/401.php';
 					return;
 				}
 			}

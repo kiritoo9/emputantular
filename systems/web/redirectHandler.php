@@ -1,0 +1,1 @@
+<a empu-redirect="true" empu-route="<?= $redirectUrl ?>"></a>

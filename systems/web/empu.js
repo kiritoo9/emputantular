@@ -69,7 +69,10 @@ class EmpuCore {
          */
         document.querySelectorAll("a").forEach(anchor => {
             const route = anchor.getAttribute('empu-route');
-            if(route !== undefined && route) {
+            const redirect = anchor.getAttribute('empu-redirect');
+            const confirmation = anchor.getAttribute('empu-confirm');
+
+            if(route !== undefined && route && !redirect) {
                 anchor.style.cursor = 'pointer';
 
                 /**
@@ -79,8 +82,12 @@ class EmpuCore {
 
                 const _this = this;
                 function empuRouteHandler() {
-                    _this.__openLoader();
-                    _this.empuLoadHandler(route);
+                    if(confirmation) {
+                        if(confirm(confirmation)) {
+                            _this.__openLoader();
+                            _this.empuLoadHandler(route);
+                        }
+                    }
                 }
                 anchor.addEventListener("click", empuRouteHandler);
                 this.__bindedEl.push({
@@ -88,6 +95,9 @@ class EmpuCore {
                     event: "click",
                     func: empuRouteHandler
                 });
+            } else if(redirect) {
+                this.__openLoader();
+                this.empuLoadHandler(route);
             }
         })
 

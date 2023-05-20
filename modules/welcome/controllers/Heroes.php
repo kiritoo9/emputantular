@@ -22,7 +22,9 @@ class Heroes extends Controller
 		 * Query Builder example for GET data
 		 * Read full documentations for another functions
 		 * */
-		$heroes = $this->DB->table('heroes')->get();
+		$heroes = $this->DB->table('heroes')
+			->orderBy("fullname", "ASC")
+			->get();
 
 		Views::render("welcome/views/heroes/list", [
 			'title' => 'List Heroes',
@@ -57,7 +59,11 @@ class Heroes extends Controller
 	 * -------
 	 * Example to handle CRUD actions
 	 * 
-	 * func setResponse((int)statusCode, (array)responseData, (string)redirectUrl);
+	 * func setResponse((int)statusCode, (string)message, (array)responseData, (string)redirectUrl);
+	 * Use in form action
+	 * 
+	 * func redirectTo((string)redirectUrl, (string)message)
+	 * Use in action without form
 	 */
 
 	public function insert($request)
@@ -77,11 +83,27 @@ class Heroes extends Controller
 
 	public function update($request)
 	{
-		$this->setResponse(201, "Update success", [], "/heroes");
+		if($request['fullname']) {
+			$this->DB->table("heroes")
+				->where("id", $request['id'])
+				->update([
+					"fullname" => $request['fullname'],
+					"strength" => $request['strength'],
+					"secret_power" => $request['secret_power'],
+				]);
+			$this->setResponse(201, "Update success", $request, "/heroes");
+		} else {
+			$this->setResponse(400, "Make sure all fields if filled!");
+		}
 	}
 
-	public function delete()
+	public function delete($request)
 	{
-		
+		if(isset($request['id'])) {
+			$this->DB->table("heroes")
+				->where("id", $request['id'])
+				->delete();
+		}
+		$this->redirectTo("/heroes", "Delete success");
 	}
 }
