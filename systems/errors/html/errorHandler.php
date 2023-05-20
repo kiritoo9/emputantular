@@ -9,8 +9,10 @@
 					"Location:", "<br /> Location:", $log
 				)
 			) ?>
-		</p><br />
-		<small>"error mulu bisa ngoding ga sih? awkwokwo"</small>
-		<h5>Emputantular - Version 2.0.0</h5>
+		</p>
+		<h5>
+			"error mulu bisa ngoding ga sih? awkwokwo"<br />
+			Emputantular - Version 2.0.0
+		</h5>
 	</div>
 </div>

@@ -19,6 +19,12 @@
 		?>
 	</div>
 
+	<!--
+		Handler error and show it in DOM
+		For SPA error only!
+	-->
+	<div id="empuErrorDom"></div>
+
 	<!-- EMPU.JS CORE -->
 	<script type="module" src="/systems/web/empu.js"></script>
 </body>

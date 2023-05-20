@@ -15,6 +15,7 @@ body {
 /**
  * Libraries
  * */
+
 .mt-10 { margin-top:10px !important; }
 .mt-20 { margin-top:20px !important; }
 .mt-30 { margin-top:30px !important; }
@@ -73,6 +74,27 @@ table.empu-table tbody tr td {
     background-color: #c0392b;
     color: white;
 }
+
+/**
+ * ErrorHandler DOM
+ * 
+ * */
+ #empuErrorDom {
+    width: auto;
+    min-height: 100px;
+    position: absolute;
+    bottom: 0;
+    background-color: #bdc3c7;
+    border-top: 1px solid black;
+    padding: 20px 20px;
+    display: none;
+ }
+ #empuErrorDom #empuErrorDOMClose {
+    cursor: pointer;
+    text-align: right;
+    color: #c0392b;
+    margin-bottom: -30px;
+ }
 
 /**
  * PRELOADER

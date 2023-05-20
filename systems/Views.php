@@ -43,7 +43,6 @@ class Views extends Core
         //     $empuui = null;
         //     $resetEmpuui = true;
         // }
-        
         require_once __DIR__ . "/../modules/". ($empuui ? $path : "app") .".php";
         
         /**

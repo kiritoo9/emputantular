@@ -170,8 +170,34 @@ class EmpuCore {
             let err_str = err;
             if(err.responseText !== undefined) err_str = err.responseText;
             this.__removeLoader(true);
-            console.log(err_str);
-            // window.alert(`Woooppss page is ${err_str}`)
+
+            let __parser = new DOMParser();
+            const errHTML = __parser.parseFromString(err_str, 'text/html');
+            const errMain = errHTML.getElementsByClassName("fof");
+            if(errMain[0].innerHTML !== undefined) {
+                /**
+                 * Append error to empuErrorDOM
+                 * Bind close button to close error
+                 * 
+                 * --- Next Version ---
+                 * Possibility to trace specific error
+                 */
+
+                let __errPoint = `<div 
+                    onclick="
+                        javascript:(function() { 
+                            document.getElementById('empuErrorDom').style.display = 'none' 
+                        })()" 
+                    id="empuErrorDOMClose">
+                        Close[x]
+                    </div>`;
+                __errPoint += errMain[0].innerHTML;
+                var empuErrorDOM = document.getElementById("empuErrorDom");
+                empuErrorDOM.innerHTML = __errPoint;
+                empuErrorDOM.style.display = "block";
+            } else {
+                window.alert(`Woooppss something went wrong, but we cannot reach the error, sorry`);
+            }
         }
     }
 
@@ -180,6 +206,7 @@ class EmpuCore {
 /**
  * Initialize DOM Core
  * Binding HashChange in Browser
+ * ErrorDomCloseDialog()
  * */
 
 const core = new EmpuCore(document.getElementById("emputantular-rootapp"));

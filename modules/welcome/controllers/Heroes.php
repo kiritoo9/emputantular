@@ -43,8 +43,7 @@ class Heroes extends Controller
 
 		$hero = $this->DB->table('heroes')->where('id', $id)->first();
 		if($hero) {
-			print_r($hero);
-			return;
+			// print_r($hero);
 		} else {
 			return $this->redirectTo("/heroes");
 		}
