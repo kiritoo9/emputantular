@@ -211,8 +211,9 @@ class Routes extends Core
 			}
 		}
 
+		$FETCH_POST = json_decode(file_get_contents('php://input'), true) ?? [];
 		call_user_func_array($pageHandler, [
-			array_merge($_GET, $_POST, $paramHandler)
+			array_merge($_GET, $_POST, $FETCH_POST, $paramHandler)
 		]);
 	}
 

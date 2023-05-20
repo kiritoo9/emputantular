@@ -63,6 +63,10 @@ class EmpuCore {
             this.handlerRouteHistories(window.location.pathname);
         }
 
+        /**
+         * <a> binding with specific attribute empu-route
+         * Prevent reload page when route changed
+         */
         document.querySelectorAll("a").forEach(anchor => {
             const route = anchor.getAttribute('empu-route');
             if(route !== undefined && route) {
@@ -73,7 +77,7 @@ class EmpuCore {
                  * Call page open handler
                 */
 
-                var _this = this;
+                const _this = this;
                 function empuRouteHandler() {
                     _this.__openLoader();
                     _this.empuLoadHandler(route);
@@ -83,6 +87,72 @@ class EmpuCore {
                     el: anchor,
                     event: "click",
                     func: empuRouteHandler
+                });
+            }
+        })
+
+        /**
+         * <form> prevent form action for reloading page
+         * Change it with javascript handler
+         * Send data form with HttpRequest
+         */
+        document.querySelectorAll("form").forEach(form => {
+            const action = form.getAttribute('empu-action');
+            if(action !== undefined && action) {
+
+                /**
+                 * Binding submit event
+                 */
+
+                const _this = this;
+                form.addEventListener("submit", async function (e) {
+                    e.preventDefault();
+                    _this.__openLoader();
+                    document.getElementById('empuErrorDom').style.display = 'none';
+
+                    let _dataToSend = {};
+                    const _formSubmitted = new FormData(form);
+                    for (const [key, value] of _formSubmitted) {
+                        _dataToSend[key] = value;
+                    }
+
+                    /**
+                     * Send data use fetch() in background
+                     * -------
+                     * 
+                     * Catch response --> get statusCode
+                     * Show response by statusCode
+                     */
+                    const response = await fetch(action, {
+                        method: "POST",
+                        body: JSON.stringify(_dataToSend),
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        }
+                    });
+
+                    _this.__removeLoader(true);
+                    if(response.status === 200 || response.status === 201) {
+                        const resBody = await response.json();
+
+                        /**
+                         * Show popup alert response (To be discoused)
+                         */
+                        if(resBody.__empuResponseMessage !== undefined && resBody.__empuResponseMessage) {
+                            // Handle response message here!
+                        }
+
+                        /**
+                         * Remove handler to make cache clean
+                         * Redirect to specific route
+                         */
+                        if(resBody.__empuRedirectUrl !== undefined && resBody.__empuRedirectUrl) {
+                            _this.empuLoadHandler(resBody.__empuRedirectUrl);
+                        }
+                    } else {
+                        const errBody = await response.text();
+                        _this.__showErrorDialog(errBody, true);
+                    }
                 });
             }
         })
@@ -170,34 +240,43 @@ class EmpuCore {
             let err_str = err;
             if(err.responseText !== undefined) err_str = err.responseText;
             this.__removeLoader(true);
+            this.__showErrorDialog(err_str, true);
+        }
+    }
 
-            let __parser = new DOMParser();
-            const errHTML = __parser.parseFromString(err_str, 'text/html');
-            const errMain = errHTML.getElementsByClassName("fof");
-            if(errMain[0].innerHTML !== undefined) {
-                /**
-                 * Append error to empuErrorDOM
-                 * Bind close button to close error
-                 * 
-                 * --- Next Version ---
-                 * Possibility to trace specific error
-                 */
+    __showErrorDialog(err_str = null, useParser = false) {
+        if(err_str) {
+            /**
+             * Append error to empuErrorDOM
+             * Bind close button to close error
+             * 
+             * --- Next Version ---
+             * Possibility to trace specific error
+             */
 
-                let __errPoint = `<div 
-                    onclick="
-                        javascript:(function() { 
-                            document.getElementById('empuErrorDom').style.display = 'none' 
-                        })()" 
-                    id="empuErrorDOMClose">
-                        Close[x]
-                    </div>`;
-                __errPoint += errMain[0].innerHTML;
-                var empuErrorDOM = document.getElementById("empuErrorDom");
-                empuErrorDOM.innerHTML = __errPoint;
-                empuErrorDOM.style.display = "block";
-            } else {
-                window.alert(`Woooppss something went wrong, but we cannot reach the error, sorry`);
+            if(useParser) {
+                let __parser = new DOMParser();
+                const errHTML = __parser.parseFromString(err_str, 'text/html');
+                const errMain = errHTML.getElementsByClassName("fof");
+
+                if(errMain.length > 0)
+                    err_str = errMain[0].innerHTML !== undefined ? errMain[0].innerHTML : err_str;
             }
+
+            let __errPoint = `<div 
+                onclick="
+                    javascript:(function() { 
+                        document.getElementById('empuErrorDom').style.display = 'none' 
+                    })()" 
+                id="empuErrorDOMClose">
+                    Close[x]
+                </div>`;
+            __errPoint += err_str;
+            var empuErrorDOM = document.getElementById("empuErrorDom");
+            empuErrorDOM.innerHTML = __errPoint;
+            empuErrorDOM.style.display = "block";
+        } else {
+            window.alert(`Woooppss something went wrong, but we cannot reach the error, sorry`);
         }
     }
 

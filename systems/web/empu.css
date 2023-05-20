@@ -80,7 +80,7 @@ table.empu-table tbody tr td {
  * 
  * */
  #empuErrorDom {
-    width: auto;
+    width: 96.2%;
     min-height: 100px;
     position: absolute;
     bottom: 0;

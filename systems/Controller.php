@@ -27,13 +27,54 @@ class Controller extends Core
 		$this->DB = new DB();
 	}
 
-	public function redirectTo($route = "/")
+	/**
+	 * setResponse($code, $data, $redirectUrl);
+	 * 
+	 * $code int 200|201|400|403|404|500
+	 * $message sting
+	 * $data array
+	 * $redirectUrl string --> if you are not set redirectUrl, page won't change to anywhere
+	 * 
+	 */
+	public function setResponse(int $code = 200, string $message = "", array $data = [], $redirectUrl = null)
 	{
-		echo "this one should be redirect to {$route}!";
+		$status = "OK";
+		switch($code) {
+			case 200:
+				$status = "OK";
+			break;
+			case 201:
+				$status = "Created";
+			break;
+			case 400:
+				$status = "Bad Request";
+			break;
+			case 401:
+				$status = "Unauthorized";
+			break;
+			case 403:
+				$status = "Access Forbiden";
+			break;
+			case 500:
+				$status = "Internal Server Error";
+			break;
+		}
+
+		header("HTTP/1.0 {$code} {$status}");
+		if($redirectUrl) $data['__empuRedirectUrl'] = $redirectUrl;
+		$data['__empuResponseMessage'] = $message;
+		echo json_encode($data);
+		return exit;
 	}
 
-	public function redirectBack()
+	public function uuidv4()
 	{
-		echo "this one should redirect to last page!";
+		return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+			mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+			mt_rand( 0, 0xffff ),
+			mt_rand( 0, 0x0fff ) | 0x4000,
+			mt_rand( 0, 0x3fff ) | 0x8000,
+			mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+		);
 	}
 }

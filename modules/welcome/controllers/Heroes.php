@@ -42,14 +42,46 @@ class Heroes extends Controller
 		$id = $request['id'] ?? null;
 
 		$hero = $this->DB->table('heroes')->where('id', $id)->first();
-		if($hero) {
-			// print_r($hero);
-		} else {
+		if(!$hero) {
 			return $this->redirectTo("/heroes");
 		}
 
 		Views::render("welcome/views/heroes/edit", [
-			'title' => 'Edit Heroes'
+			'title' => 'Edit Heroes',
+			'hero' => $hero
 		]);
+	}
+
+	/**
+	 * Hero Actions
+	 * -------
+	 * Example to handle CRUD actions
+	 * 
+	 * func setResponse((int)statusCode, (array)responseData, (string)redirectUrl);
+	 */
+
+	public function insert($request)
+	{
+		if($request['fullname']) {
+			$this->DB->table("heroes")->insert([
+				"id" => $this->uuidv4(),
+				"fullname" => $request['fullname'],
+				"strength" => $request['strength'],
+				"secret_power" => $request['secret_power'],
+			]);
+			$this->setResponse(201, "Insert success", $request, "/heroes");
+		} else {
+			$this->setResponse(400, "Make sure all fields if filled!");
+		}
+	}
+
+	public function update()
+	{
+
+	}
+
+	public function delete()
+	{
+		
 	}
 }
