@@ -12,7 +12,7 @@
     	<div class="fof">
         	<h1>404</h1>
         	<p>
-        		Seems like you lost, please call your mom because we're kinda busy today
+        		Seems like route is not found, please call your mom because we're kinda busy today
         	</p>
         	<h5>Emputantular - Version 2.0.0</h5>
     	</div>

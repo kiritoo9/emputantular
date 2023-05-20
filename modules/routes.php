@@ -41,6 +41,7 @@ $routes->group('/heroes', function($routes) {
     $routes->get('/edit/{$id}', Heroes::class . '::edit');
 
     $routes->post('/insert', Heroes::class . '::insert');
+    $routes->post('/update', Heroes::class . '::update');
 });
 
 $routes->run();

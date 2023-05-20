@@ -184,7 +184,7 @@ class EmpuCore {
         });
     }
 
-    handlerRouteHistories(route, backward) {
+    handlerRouteHistories(route, backward = false) {
         let __histories = window.localStorage.getItem("__empuRouteHistories");
         __histories = __histories ? JSON.parse(__histories) : [];
         if(!backward) {
@@ -211,8 +211,8 @@ class EmpuCore {
              * */
 
             this.empuCookieHandler("empuui", true, 1);
-            var req = await this.empuXHRCall("GET", route);
             route = this.handlerRouteHistories(route, backward);
+            var req = await this.empuXHRCall("GET", route);
 
             while(this.root_element.firstChild) {
                 this.root_element.lastChild.remove();

@@ -75,9 +75,9 @@ class Heroes extends Controller
 		}
 	}
 
-	public function update()
+	public function update($request)
 	{
-
+		$this->setResponse(201, "Update success", [], "/heroes");
 	}
 
 	public function delete()
