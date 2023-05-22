@@ -80,14 +80,16 @@ table.empu-table tbody tr td {
  * 
  * */
  #empuErrorDom {
-    width: 96.2%;
+    width: 100%;
     min-height: 100px;
     position: absolute;
     bottom: 0;
     background-color: #bdc3c7;
     border-top: 1px solid black;
     padding: 20px 20px;
+    z-index: 9999999;
     display: none;
+    color: black;
  }
  #empuErrorDom #empuErrorDOMClose {
     cursor: pointer;

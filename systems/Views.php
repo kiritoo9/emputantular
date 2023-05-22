@@ -23,7 +23,7 @@ class Views extends Core
 {
 	public static function render(string $path, $data = []): void
 	{
-        $__setTitle = null;
+        $__setTitle = "Emputantular";
         foreach ($data as $row => $value) {
             ${$row} = $value;
             if(strtolower($row) === 'title') $__setTitle = $value;
