@@ -82,11 +82,13 @@ class EmpuCore {
 
                 const _this = this;
                 function empuRouteHandler() {
-                    if(confirmation) {
-                        if(confirm(confirmation)) {
-                            _this.__openLoader();
-                            _this.empuLoadHandler(route);
-                        }
+                    let allowed = true;
+                    if(confirmation) 
+                        allowed = confirm(confirmation);
+
+                    if(allowed) {
+                        _this.__openLoader();
+                        _this.empuLoadHandler(route);
                     }
                 }
                 anchor.addEventListener("click", empuRouteHandler);

@@ -17,6 +17,9 @@
 		font-weight: bold;
 		color: #2980b9;
 	}
+	a {
+		text-align: center;
+	}
 </style>
 
 <div class="welcome-box">
@@ -24,6 +27,10 @@
 	<p>
 		<i><?= $quote ?></i>
 	</p>
+	<center>
+		<a empu-route="/heroes" class="empu-btn empu-btn-primary">Try CRUD Example</a>
+	</center>
+	<br />
 	<p style="font-size:15px">
 		<b>Emputantular Framework - version 2.0.0</b>
 	</p>
