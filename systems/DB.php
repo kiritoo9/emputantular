@@ -47,6 +47,10 @@ class DB extends Core
             $value = $operator;
             $operator = '=';
         }
+        if (is_bool($value)) {
+            $value = $value ? 'true' : 'false';
+        }
+
         $w = [
             'field' => $field,
             'operator' => $operator,
@@ -103,15 +107,37 @@ class DB extends Core
         $query = "INSERT INTO {$this->global_table} ";
         $value_str = "";
         $index = 0;
-        foreach ($data as $row => $value) {
-            $value = is_string($value) ? " '{$value}' " : $value;
+        $where_params = [];
 
+        foreach ($data as $row => $value) {
             $query .= ($index === 0 ? '(' : null)." {$row} ".($index < (count($data)-1) ? ',' : ')');
-            $value_str .= ($index === 0 ? '(' : null)." {$value} ".($index < (count($data)-1) ? ',' : ')');
+
+            /**
+             * Use Classic
+             * ----
+             * $value = is_string($value) ? " '{$value}' " : $value;
+             * $value_str .= ($index === 0 ? '(' : null)." {$value} ".($index < (count($data)-1) ? ',' : ')');
+             * */
+
+            /**
+             * Use Statement
+             * */
+            $value_str .= ($index === 0 ? '(' : null)." :{$row} ".($index < (count($data)-1) ? ',' : ')');
             $index++;
+            $where_params[$row] = $value;
         }
         $query = "{$query} VALUES {$value_str};";
-        return $this->executeQuery($query);
+
+        /**
+         * Use Classic
+         * -> return $this->executeQuery($query);
+         * ------
+         * 
+         * Use Statement
+         * -> return $this->executeStatementQuery($query, $where_params)
+         * */
+
+        return $this->executeStatementQuery($query, $where_params);
     }
 
     public function update(array $data = [])
@@ -119,16 +145,40 @@ class DB extends Core
         if(count($this->global_where) <= 0) throw new \Exception('You did not define conditions yet!');
 
         $query = "UPDATE {$this->global_table} SET ";
-        $index = 0;
-        foreach ($data as $row => $value) {
-            $value = is_string($value) ? " '{$value}' " : $value;
-            $query .= " {$row} = {$value} ".($index < (count($data)-1) ? ',' : null);
+        $where_params = [];
 
-            $index++;
+        foreach ($data as $row => $value) {
+            /**
+             * Use Classic
+             * -----
+             * $value = is_string($value) ? " '{$value}' " : $value;
+             * $query .= " {$row} = {$value} ".($index < (count($data)-1) ? ',' : null);
+             * */
+
+            /**
+             * Use Statement
+             * ----
+             * */
+
+            $query .= " {$row} = :{$row} ".($row < (count($data)-1) ? ',' : null);
+            $where_params[$row] = $value;
         }
-        $query .= $this->translateWhere();
-        
-        return $this->executeQuery($query);
+
+        /**
+         * Use Classic
+         * -> $query .= $this->translateWhere();
+         * -> return $this->executeQuery($query);
+         * ------
+         * 
+         * Use Statement
+         * -> $response = $this->translateStatementWhere();
+         * -> return $this->executeStatementQuery($query, $where_params)
+         * */
+
+        $wresponse = $this->translateStatementWhere();
+        $query .= $wresponse["query"];
+        $where_params = array_merge($where_params, $wresponse["where_params"]);
+        return $this->executeStatementQuery($query, $where_params);
     }
 
     public function delete()
@@ -136,9 +186,22 @@ class DB extends Core
         if(count($this->global_where) <= 0) throw new \Exception('You did not define conditions yet!');
 
         $query = "DELETE FROM {$this->global_table} ";
-        $query .= $this->translateWhere();
-        
-        return $this->executeQuery($query);
+
+        /**
+         * Use Classic
+         * -> $query .= $this->translateWhere();
+         * -> return $this->executeQuery($query);
+         * ------
+         * 
+         * Use Statement
+         * -> $response = $this->translateStatementWhere();
+         * -> return $this->executeStatementQuery($query, $where_params)
+         * */
+
+        $wresponse = $this->translateStatementWhere();
+        $query .= $wresponse["query"];
+        $where_params = $wresponse["where_params"];
+        return $this->executeStatementQuery($query, $where_params);
     }
 
     public function raw(String $raw)
@@ -171,6 +234,22 @@ class DB extends Core
         return $query;
     }
 
+    private function translateStatementWhere(): array
+    {
+        $response = [
+            "query" => "",
+            "where_params" => []
+        ];
+        foreach ($this->global_where as $row => $value) {
+            $value = (object)$value;
+
+            $response["query"] .= ($row === 0 ? " WHERE " : null)." {$value->field} = :{$value->field} ".($row < (count($this->global_where)-1) ? " AND " : null);
+            $response["where_params"][$value->field] = $value->value;
+        }
+
+        return $response;
+    }
+
     private function translateQuery($type = 'all')
     {
         $query = "SELECT ";
@@ -186,16 +265,29 @@ class DB extends Core
         }
 
         if(count($this->global_where) > 0) $query .= " WHERE ";
+
+        $where_params = [];
         foreach ($this->global_where as $rw => $vw) {
             $vw = (object)$vw;
-            $_value = is_string($vw->value) ? "'{$vw->value}'" : $vw->value;
 
-            if(is_null($_value)) {
-                $_value = ($vw->operator === '=' ? 'is' : 'is not')." null ";
-                $vw->operator = null;
-            }
+            /**
+             * Use Classic
+             * -------
+                $_value = is_string($vw->value) ? "'{$vw->value}'" : $vw->value;
 
-            $query .= ($rw === 0 ? null : ' AND ')." {$vw->field} {$vw->operator} {$_value} ";
+                if(is_null($_value)) {
+                    $_value = ($vw->operator === '=' ? 'is' : 'is not')." null ";
+                    $vw->operator = null;
+                }
+            **/
+
+            /**
+             * Use Statement
+             * -------
+             * */
+
+            $query .= ($rw === 0 ? null : ' AND ')." {$vw->field} {$vw->operator} :{$vw->field} ";
+            $where_params[$vw->field] = $vw->value;
         }
 
         if(count($this->global_order) > 0) $query .= " ORDER BY ";
@@ -211,10 +303,10 @@ class DB extends Core
             $query .= " LIMIT 1 OFFSET 0 ";
         }
 
-       return $this->executeQuery($query, $type);
+        return $this->executeQuery($query, $type, null, $where_params);
     }
 
-    private function executeQuery(String $raw = '', String $type = 'all', String $exec_type = null)
+    private function executeQuery(String $raw = '', String $type = 'all', String $exec_type = null, array $where_params = [])
     {
         $this->init(); // OPEN CONNECTION
 
@@ -222,7 +314,16 @@ class DB extends Core
         if($exec_type === 'exec') {
             $data = $this->database_connection->exec($raw);
         } else {
-            $response = $this->database_connection->query($raw);
+            if(count($where_params) > 0) {
+                $response = $this->database_connection->prepare($raw);
+                $response->execute($where_params);
+            } else {
+                $response = $this->database_connection->query($raw);
+            }
+
+            /**
+             * Convert data to object
+             * */
             $index = 0;
             while($row = $response->fetch(\PDO::FETCH_ASSOC)) {
                 if(strtolower($type) === 'all') {
@@ -237,6 +338,15 @@ class DB extends Core
 
         $this->database_connection = null; // CLOSE CONNECTION
         return $data;
+    }
+
+    private function executeStatementQuery(string $query = "", array $where_params = [])
+    {
+        $this->init();
+        $response = $this->database_connection->prepare($query);
+        $response = $response->execute($where_params);
+        $this->database_connection = null; // CLOSE CONNECTION
+        return $response;
     }
 
 }
