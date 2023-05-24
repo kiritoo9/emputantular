@@ -1,0 +1,63 @@
+/**
+ * Empu - Component Style
+ * 
+*/
+
+._empuTableTopBox,
+._empuTableBottomBox {
+	width: 100%;
+	min-height: 20px;
+	margin: 10px 0;
+	position: relative;
+}
+
+._empuTableTopBox ._empuTableTopBox-sortBox {
+	width: 10%;
+	float: left;
+	min-height: 20px;
+}
+
+._empuTableTopBox ._empuTableTopBox-searchBox {
+	width: 90%;
+	float: left;
+	min-height: 20px;
+}
+._empuTableTopBox ._empuTableTopBox-searchBox input {
+    width: 35%;
+    float: right;
+    border-radius: 2px;
+    padding: 8px 10px;
+    border: 2px solid #dedede;
+    margin-bottom: 20px;
+    font-size: 13px;
+}
+
+._empuTableTopBox ._empuTableTopBox-sortBox {}
+._empuTableTopBox ._empuTableTopBox-sortBox ._empuSortBoxSelect {
+	color: black;
+}
+
+._empuTableBottomBox ._empuPagingBox {
+	width: 50%;
+    min-height: 30px;
+    background-color: transparent;
+    float: right;
+    margin-top: 20px;
+}
+
+._empuTableBottomBox ._empuPagingBox ul {
+	display: inline;
+	float: right;
+}
+._empuTableBottomBox ._empuPagingBox ul li {
+	list-style: none;
+	display: inline;
+	cursor: pointer;
+	width: auto;
+	min-height: 20px;
+	text-align: center;
+	border: 1px solid #dedede;
+	border-radius: 3px;
+	padding:10px;
+	margin-right: 3px;
+}

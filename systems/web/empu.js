@@ -230,6 +230,14 @@ class EmpuCore {
                 this.root_element.lastChild.remove();
             }
 
+            /**
+             * Check javascript function and execute
+             * */
+            let __parser = new DOMParser();
+            const __scriptJS = __parser.parseFromString(req, 'text/html');
+            const __fnJS = __scriptJS.querySelector("script");
+            if(__fnJS) eval(__fnJS.innerHTML);
+
             let __arrCookies = document.cookie.split(";");
             let __strTitle = __arrCookies.length > 0 ? __arrCookies[0] : null;
             const __cookieTitle = `activeTitle=`;

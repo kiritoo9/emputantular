@@ -204,9 +204,9 @@ class DB extends Core
         return $this->executeStatementQuery($query, $where_params);
     }
 
-    public function raw(String $raw)
+    public function raw(String $raw, String $type = 'all')
     {
-        return $this->executeQuery($raw);
+        return $this->executeQuery($raw, $type);
     }
 
     public function exec(String $raw)
