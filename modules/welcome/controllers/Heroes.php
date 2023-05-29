@@ -13,19 +13,25 @@ if(!defined('EmpuCoreApp')) exit('You cannot access the file directly bro!');
 
 use Empu\Controller;
 use Empu\Views;
+use Modules\Welcome\Business\Welcome;
 
 class Heroes extends Controller
 {
+	public $welcome_business;
+
+	public function __construct()
+	{
+		$this->welcome_business = new Welcome();
+	}
+
 	public function index()
 	{
 		/**
-		 * Query Builder example for GET data
+		 * Get data from business
 		 * Read full documentations for another functions
 		 * */
-		$heroes = $this->DB->table('heroes')
-			->orderBy("fullname", "ASC")
-			->get();
 
+		$heroes = $this->welcome_business->getHeroes();
 		Views::render("welcome/views/heroes/list", [
 			'title' => 'List Heroes',
 			'heroes' => $heroes
@@ -43,7 +49,7 @@ class Heroes extends Controller
 	{
 		$id = $request['id'] ?? null;
 
-		$hero = $this->DB->table('heroes')->where('id', $id)->first();
+		$hero = $this->welcome_business->getHeroById($id);
 		if(!$hero) {
 			return $this->redirectTo("/heroes");
 		}
@@ -69,7 +75,7 @@ class Heroes extends Controller
 	public function insert($request)
 	{
 		if($request['fullname']) {
-			$this->DB->table("heroes")->insert([
+			$this->welcome_business->insertHero([
 				"id" => $this->uuidv4(),
 				"fullname" => $request['fullname'],
 				"strength" => $request['strength'],
@@ -84,13 +90,11 @@ class Heroes extends Controller
 	public function update($request)
 	{
 		if($request['fullname']) {
-			$this->DB->table("heroes")
-				->where("id", $request['id'])
-				->update([
-					"fullname" => $request['fullname'],
-					"strength" => $request['strength'],
-					"secret_power" => $request['secret_power'],
-				]);
+			$this->welcome_business->updateHero($request['id'], [
+                "fullname" => $request['fullname'],
+                "strength" => $request['strength'],
+                "secret_power" => $request['secret_power'],
+            ]);
 			$this->setResponse(201, "Update success", $request, "/heroes");
 		} else {
 			$this->setResponse(400, "Make sure all fields if filled!");
@@ -100,9 +104,7 @@ class Heroes extends Controller
 	public function delete($request)
 	{
 		if(isset($request['id'])) {
-			$this->DB->table("heroes")
-				->where("id", $request['id'])
-				->delete();
+			$this->welcome_business->deleteHero($request['id']);
 		}
 		$this->redirectTo("/heroes", "Delete success");
 	}

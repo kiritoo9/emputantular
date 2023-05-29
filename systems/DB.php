@@ -147,6 +147,7 @@ class DB extends Core
         $query = "UPDATE {$this->global_table} SET ";
         $where_params = [];
 
+        $index = 0;
         foreach ($data as $row => $value) {
             /**
              * Use Classic
@@ -160,8 +161,9 @@ class DB extends Core
              * ----
              * */
 
-            $query .= " {$row} = :{$row} ".($row < (count($data)-1) ? ',' : null);
+            $query .= " {$row} = :{$row} ".($index < (count($data)-1) ? ',' : null);
             $where_params[$row] = $value;
+            $index++;
         }
 
         /**
