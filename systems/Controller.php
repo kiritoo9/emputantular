@@ -69,6 +69,11 @@ class Controller extends Core
 
 	public function redirectTo($redirectUrl = null, string $message = "")
 	{
+		header("Location: " . $redirectUrl);
+	}
+
+	public function redirectTo_SPA($redirectUrl = null, string $message = "")
+	{
 		if($redirectUrl) {
 			require_once __DIR__ . "/web/redirectHandler.php";
 		}

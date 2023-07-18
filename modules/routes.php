@@ -11,8 +11,6 @@
 */
 
 use Empu\Routes;
-use Empu\Libs;
-use Empu\Views;
 use Modules\Welcome\Controllers\Welcome;
 use Modules\Welcome\Controllers\Heroes;
 

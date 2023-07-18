@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/systems/web/empu.css">
 <style type="text/css">
 	.welcome-box {
 		width: 80%;
@@ -28,7 +29,7 @@
 		<i><?= $quote ?></i>
 	</p>
 	<center>
-		<a empu-route="/heroes" class="empu-btn empu-btn-primary">Try CRUD Example</a>
+		<a href="/heroes" class="empu-btn empu-btn-primary">Try CRUD Example</a>
 	</center>
 	<br />
 	<p style="font-size:15px">

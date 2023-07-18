@@ -1,12 +1,11 @@
 
 # Emputantular Framework
 
-PHP framework with SinglePageApplication using vanilla.JS and native PHP.
+Simple and Lite PHP framework
 
 
 ## Features
 
- - SPA (Single Page Application) using vanilla.js for best performance!
  - Query Builders
  - Migrations and Seeders
  - Modular App
@@ -23,10 +22,7 @@ After setup your .env file, run the following command
 ```
 ## Tech Stack
 
-**Client:** Vanilla.JS
-
-**Server:** PHP
-
+**Server:** PHP Native
 
 ## Usage/Examples
 

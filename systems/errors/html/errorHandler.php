@@ -1,14 +1,11 @@
-<title>Wooppsss!!</title>
 <link rel="stylesheet" href="/systems/errors/html/style.css">
-<div id="main">
+<div id="empu_err_main">
 	<div class="fof">
-		<h1>Error dik!</h1>
+		<h2>ERROR CIL</h2>
 		<p>
-			<?= str_replace(
-				"Error:", "<br /> Error:", str_replace(
-					"Location:", "<br /> Location:", $log
-				)
-			) ?>
+			Error: <?= isset($empuError['message']) ? $empuError['message'] : 'Undefined Error' ?><br />
+			File: <?= isset($empuError['file']) ? $empuError['file'] : 'Unreachable File' ?> <br />
+			Line: <?= isset($empuError['line']) ? $empuError['line'] : '0' ?>
 		</p>
 		<h5>
 			"error mulu bisa ngoding ga sih? awkwokwo"<br />
