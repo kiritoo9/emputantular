@@ -9,7 +9,9 @@
  * */
 
 namespace Modules\Welcome\Controllers;
-if(!defined('EmpuCoreApp')) exit('You cannot access the file directly bro!');
+
+if (!defined('EmpuCoreApp'))
+	exit('You cannot access the file directly bro!');
 
 use Empu\Controller;
 use Empu\Views;
@@ -53,7 +55,7 @@ class Heroes extends Controller
 		$id = $request['id'] ?? null;
 
 		$hero = $this->welcome_business->getHeroById($id);
-		if(!$hero) {
+		if (!$hero) {
 			return $this->redirectTo("/heroes");
 		}
 
@@ -78,38 +80,30 @@ class Heroes extends Controller
 
 	public function insert($request)
 	{
-		if($request['fullname']) {
-			$this->welcome_business->insertHero([
-				"id" => $this->uuidv4(),
-				"fullname" => $request['fullname'],
-				"strength" => $request['strength'],
-				"secret_power" => $request['secret_power'],
-			]);
-			$this->setResponse(201, "Insert success", $request, "/heroes");
-		} else {
-			$this->setResponse(400, "Make sure all fields if filled!");
-		}
+		$this->welcome_business->insertHero([
+			"id" => $this->uuidv4(),
+			"fullname" => $request['fullname'],
+			"strength" => $request['strength'],
+			"secret_power" => $request['secret_power'],
+		]);
+		$this->redirectTo("/heroes");
 	}
 
 	public function update($request)
 	{
-		if($request['fullname']) {
-			$this->welcome_business->updateHero($request['id'], [
-                "fullname" => $request['fullname'],
-                "strength" => $request['strength'],
-                "secret_power" => $request['secret_power'],
-            ]);
-			$this->setResponse(201, "Update success", $request, "/heroes");
-		} else {
-			$this->setResponse(400, "Make sure all fields if filled!");
-		}
+		$this->welcome_business->updateHero($request['id'], [
+			"fullname" => $request['fullname'],
+			"strength" => $request['strength'],
+			"secret_power" => $request['secret_power'],
+		]);
+		$this->redirectTo("/heroes");
 	}
 
 	public function delete($request)
 	{
-		if(isset($request['id'])) {
+		if (isset($request['id'])) {
 			$this->welcome_business->deleteHero($request['id']);
 		}
-		$this->redirectTo("/heroes", "Delete success");
+		$this->redirectTo("/heroes");
 	}
 }
