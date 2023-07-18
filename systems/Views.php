@@ -16,49 +16,33 @@ namespace Empu;
 */
 
 use Empu\Core;
-use Empu\Session;
-use Empu\Logs;
 
 class Views extends Core
 {
-	public static function render(string $path, $data = []): void
+    public static $global_props = [];
+	public static function render(string $path, $_props = []): void
 	{
-        $__setTitle = "Emputantular";
-        foreach ($data as $row => $value) {
-            ${$row} = $value;
-            if(strtolower($row) === 'title') $__setTitle = $value;
-        }
-        $__empuContent = $path;
-        $empuui = $_COOKIE['empuui'] ?? null;
-
-        /**
-         * Handle file not exists when user try to open view
-         * ------
-         * Remove empuui cache
-         * recall app.php to trigger try execption
-         */
-
-        // $resetEmpuui = false;
-        // if(!file_exists(__DIR__ . "/../modules/{$path}.php")) {
-        //     $empuui = null;
-        //     $resetEmpuui = true;
-        // }
-        require_once __DIR__ . "/../modules/". ($empuui ? $path : "app") .".php";
-        
-        /**
-         * Reset Empuui Cookies
-         * Update activeTitle
-         * */
-
-        if($empuui) {
-            unset($_COOKIE['empuui']);
-            setcookie('empuui', '', -1, '/');
-        }
-        if(isset($_COOKIE['activeTitle'])) {
-            unset($_COOKIE['activeTitle']);
-            setcookie('activeTitle', $__setTitle, -1, '/');
-        } else {
-            setcookie('activeTitle', $__setTitle);
+        try {
+            foreach ($_props as $row => $value) {
+                ${$row} = $value;
+            }
+            self::$global_props = $_props;
+            require_once __DIR__ . "/../modules/". $path .".php";
+        } catch (\Throwable $th) {
+            $empuError = [
+                'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+            ];
+            require_once __DIR__ . "/../systems/errors/html/errorHandler.php";
         }
 	}
+
+    public static function loadView(string $path): void
+    {
+        foreach(self::$global_props as $row => $value) {
+            ${$row} = $value;
+        }
+        require_once __DIR__ . "/../modules/". $path .".php";
+    }
 }
