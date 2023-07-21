@@ -169,6 +169,29 @@ class Routes extends Core
 				$pageHandler = null;
 		}
 
+		if (is_string($pageHandler)) {
+			$parts = explode('::', $pageHandler);
+			if (is_array($parts)) {
+				$moduleAddress = $parts[0];
+				$className = array_shift($parts);
+				$handler = new $className;
+
+				$method = array_shift($parts);
+				$pageHandler = [$handler, $method];
+
+				/**
+				 * Send to ActiveModule session
+				 */
+				$arrModule = explode('\\', $moduleAddress);
+				if(!isset($arrModule[1])) {
+					$pageHandler = null;
+				} else {
+					if (session_status() === PHP_SESSION_NONE) session_start();
+					$_SESSION['ACTIVE_MODULE'] = $arrModule[1];
+				}
+			}
+		}
+
 		if(!$pageHandler) {
 			header("HTTP/1.0 404 Not Found");
 			if($this->notFoundHandler) {
@@ -176,17 +199,6 @@ class Routes extends Core
 			} else {
 				require_once __DIR__ . '/errors/html/404.php';
 				return;
-			}
-		}
-
-		if (is_string($pageHandler)) {
-			$parts = explode('::', $pageHandler);
-			if (is_array($parts)) {
-				$className = array_shift($parts);
-				$handler = new $className;
-
-				$method = array_shift($parts);
-				$pageHandler = [$handler, $method];
 			}
 		}
 
