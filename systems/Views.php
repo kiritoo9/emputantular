@@ -20,6 +20,13 @@ use Empu\Core;
 class Views extends Core
 {
     public static $global_props = [];
+
+    protected static function _generatePath($path): string
+    {
+        $modules = $_SESSION['ACTIVE_MODULE'];
+        return "/../modules/". $modules . "/Views/". $path .".php";
+    }
+
 	public static function render(string $path, $_props = []): void
 	{
         try {
@@ -27,7 +34,7 @@ class Views extends Core
                 ${$row} = $value;
             }
             self::$global_props = $_props;
-            require_once __DIR__ . "/../modules/". $path .".php";
+            require_once __DIR__ . self::_generatePath($path);
         } catch (\Throwable $th) {
             $empuError = [
                 'message' => $th->getMessage(),
@@ -43,6 +50,6 @@ class Views extends Core
         foreach(self::$global_props as $row => $value) {
             ${$row} = $value;
         }
-        require_once __DIR__ . "/../modules/". $path .".php";
+        require_once __DIR__ . self::_generatePath($path);
     }
 }
