@@ -44,5 +44,17 @@ try {
 
     require_once __DIR__ . '/modules/routes.php';
 } catch(Throwable $empuErrHandler) {
-    Logs::empuErrHandler($empuErrHandler);
+    $empuError = [
+        'message' => $empuErrHandler->getMessage(),
+        'file' => $empuErrHandler->getFile(),
+        'line' => $empuErrHandler->getLine(),
+    ];
+    require_once __DIR__ . "/../systems/errors/html/errorHandler.php";
+    
+    /**
+     * To write error log in error.log file
+     * uncomment to use it
+     */
+    
+    // Logs::empuErrHandler($empuErrHandler);
 }
