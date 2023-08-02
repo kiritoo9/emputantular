@@ -20,7 +20,7 @@ use Modules\Welcome\Business\Welcome;
 class Heroes extends Controller
 {
 	public $welcome_business;
-	public $layout = "welcome/views/heroes/layout";
+	public $layout = "heroes/layout";
 
 	public function __construct()
 	{
@@ -37,7 +37,7 @@ class Heroes extends Controller
 		$heroes = $this->welcome_business->getHeroes();
 		Views::render($this->layout, [
 			'title' => 'List Heroes',
-			'content' => 'welcome/views/heroes/list',
+			'content' => 'heroes/list',
 			'heroes' => $heroes
 		]);
 	}
@@ -46,7 +46,7 @@ class Heroes extends Controller
 	{
 		Views::render($this->layout, [
 			'title' => 'Add Heroes',
-			'content' => 'welcome/views/heroes/add'
+			'content' => 'heroes/add'
 		]);
 	}
 
@@ -61,7 +61,7 @@ class Heroes extends Controller
 
 		Views::render($this->layout, [
 			'title' => 'Edit Heroes',
-			'content' => 'welcome/views/heroes/edit',
+			'content' => 'heroes/edit',
 			'hero' => $hero
 		]);
 	}

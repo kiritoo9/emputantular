@@ -48,8 +48,9 @@ try {
         'message' => $empuErrHandler->getMessage(),
         'file' => $empuErrHandler->getFile(),
         'line' => $empuErrHandler->getLine(),
+        'details' => $empuErrHandler->getTrace(),
     ];
-    require_once __DIR__ . "/../systems/errors/html/errorHandler.php";
+    require_once __DIR__ . "/systems/errors/html/errorHandler.php";
     
     /**
      * To write error log in error.log file

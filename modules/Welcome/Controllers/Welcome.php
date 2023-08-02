@@ -21,9 +21,9 @@ class Welcome extends Controller
 	public function index()
 	{
 		$quote = "
-			Many people say it’s easier to learn a language when you are young but there are advantages to learning a language when you are older.
+			Many people say it is easier to learn a language when you are young but there are advantages to learning a language when you are older.
 		";
-		Views::render("welcome/views/welcome", [
+		Views::render("welcome", [
 			'title' => 'Welcome page',
 			'quote' => $quote
 		]);

@@ -1,9 +1,14 @@
+body {
+    padding: 0;
+    margin: 0;
+}
 #empu_err_main {
     font-family: 'Lato', sans-serif;
     display: table;
-    width: 100%;
+    width: auto;
     height: auto;
-    margin: 20px;
+    margin: 20px auto;
+    padding: 10px;
     border-radius: 10px;
     text-align: center;
     border: 1px solid #c23616;
@@ -29,4 +34,15 @@
 
 #empu_err_main .fof h5 {
     margin-top: 0;
+}
+
+#tableError {
+    /* border: 1px solid black; */
+    width: auto;
+    margin: 20px 0;
+}
+#tableError thead tr th,
+#tableError tbody tr td {
+    padding: 5px;
+    font-size: 12px;
 }
