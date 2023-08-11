@@ -19,14 +19,14 @@ class Manage
 	public function run()
 	{
 		$line = "------------------------\n";
-		$str_line = $line."--- EMPUTANTULAR CLI ---\n".$line."\nversion: 2.0.0\nauthor: kiritoo9\n\nwhich one do you want to generate:\n";
+		$str_line = $line."--- EMPUTANTULAR CLI ---\n".$line."\nversion: 2.0.0\nauthor: kiritoo9\n\nmau generate apa cil?:\n";
 		foreach ($this->menu_list as $row => $value) {
 			$row++;
 			$str_line .= "{$row}. {$value}\n";
 		}
 		echo(trim($str_line));
 
-		$user_input = (int)readline("\n\ntype something bro: ");
+		$user_input = (int)readline("\n\nmasukin pilihan lu: ");
 		if($user_input > 0 && $user_input <= count($this->menu_list)) {
 			try {
 				switch ($user_input) {
@@ -47,10 +47,10 @@ class Manage
 						break;
 				}
 			} catch(Throwable $e) {
-				exit("\n".$e);
+				exit("\nada error cil wkwkwk maap dah\n\n".$e);
 			}
 		} else {
-			exit("\nResponse: awkwkwk bodoh kah????!!");
+			exit("\nawkwkwk bodoh kah????!!");
 		}
 	}
 
